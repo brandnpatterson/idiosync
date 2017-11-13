@@ -6,7 +6,7 @@ import styled from 'styled-components'
 
 import NewAuthorForm from './themes/Form'
 
-const req = 'http://localhost:3000/api/v1/authors'
+const req = '/api/v1/authors'
 
 class NewAuthor extends Component {
   constructor () {

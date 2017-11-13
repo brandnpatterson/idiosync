@@ -8,7 +8,7 @@ import styled from 'styled-components'
 import NewArticleForm from './themes/Form'
 import NotFound from './NotFound'
 
-const req = 'http://localhost:3000/api/v1/articles'
+const req = '/api/v1/articles'
 
 class NewArticle extends Component {
   constructor () {

@@ -80,6 +80,6 @@ test:
 #
 production:
   <<: *default
-  database: idiosync_production
-  username: idiosync-api
+  database: idiosync_prod
+  username: idiosync
   password: <%= ENV['IDIOSYNC-API_DATABASE_PASSWORD'] %>

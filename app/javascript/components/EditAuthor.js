@@ -7,7 +7,7 @@ import styled from 'styled-components'
 import EditAuthorForm from './themes/Form'
 import DeleteAuthorForm from './themes/Form'
 
-const req = 'http://localhost:3000/api/v1/authors'
+const req = '/api/v1/authors'
 
 class EditAuthor extends Component {
   constructor () {

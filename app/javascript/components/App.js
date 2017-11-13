@@ -18,9 +18,9 @@ import Tags from './Tags'
 
 const landingImg = 'images/landing.jpg'
 
-const reqArticles = 'http://localhost:3000/api/v1/articles'
-const reqAuthors = 'http://localhost:3000/api/v1/authors'
-const reqSession = 'http://localhost:3000/api/v1/sessions'
+const reqArticles = '/api/v1/articles'
+const reqAuthors = '/api/v1/authors'
+const reqSession = '/api/v1/sessions'
 
 class App extends Component {
   constructor () {
@@ -95,12 +95,17 @@ class App extends Component {
 
   setReactIds = () => {
     const { articles, authors } = this.state
-    articles.forEach((article, index) => {
-      article.id_react = index + 1
-    })
-    authors.forEach((author, index) => {
-      author.id_react = index + 1
-    })
+
+    function setYearVersion (data, year) {
+      data.filter((article, index) => {
+        if (article.created_at.startsWith(year)) {
+          return article.id_react = index + 1
+        }
+      })
+    }
+
+    setYearVersion(articles, '2017')
+    setYearVersion(authors, '2017')
   }
 
   // authentication

@@ -7,16 +7,11 @@ const propTypes = {
   articles: array.isRequired,
   authors: array.isRequired,
   flash_delete: bool.isRequired,
-  flash_update: bool.isRequired
+  flash_update: bool.isRequired,
+  tags: array.isRequired
 }
 
-const Articles = ({ articles, authors, flash_delete, flash_update }) => {
-  articles.map(article => {
-    article.tags.map(tag => {
-      console.log(tag)
-    })
-  })
-
+const Articles = ({ articles, authors, flash_delete, flash_update, tags }) => {
   return (
     <ArticlesWrapper>
       <div className="outer">

@@ -39,6 +39,9 @@ class App extends Component {
     }
   }
 
+  // if year of session
+  // put into state
+
   componentWillMount () {
     this.getRequest()
     let localAuth = localStorage.getItem('authenticated')
@@ -99,11 +102,18 @@ class App extends Component {
     function setYearVersion (data, year) {
       data.filter((article, index) => {
         if (article.created_at.startsWith(year)) {
-          return article.id_react = index + 1
+          const tagIds = articles.map(article => {
+            article.tags.map(tag => {
+              return article.id_tag = article.tag
+            })
+          })
+          return [
+            article.id_react = index + 1,
+            tagIds
+          ]
         }
       })
     }
-
     setYearVersion(articles, '2017')
     setYearVersion(authors, '2017')
   }
@@ -251,6 +261,7 @@ class App extends Component {
                 authors={authors}
                 flash_delete={flash_delete}
                 flash_update={flash_update}
+                tags={tags}
               />
             }} />
           )}

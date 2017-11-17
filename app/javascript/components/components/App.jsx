@@ -39,12 +39,10 @@ class App extends Component {
     }
   }
 
-  // if year of session
-  // put into state
-
   componentWillMount () {
     this.getRequest()
     let localAuth = localStorage.getItem('authenticated')
+    let localTags = localStorage.getItem('tags')
     if (localAuth === 'true') {
       this.setState({
         authenticated: true
@@ -65,13 +63,13 @@ class App extends Component {
         this.setState({ authors })
         setTimeout(() => {
           this.setTags()
-        }, 200)
+        }, 2)
       })
       .catch(err => console.log(err))
   }
 
   setTags = () => {
-    const { articles, tags } = this.state
+    const { articles, tags, tagNames } = this.state
     // access each article.tags to be used in tags state
     setTimeout(() => {
       articles.forEach(article => {
@@ -93,7 +91,7 @@ class App extends Component {
           })
         })
       })
-    }, 200)
+    }, 2)
   }
 
   setReactIds = () => {

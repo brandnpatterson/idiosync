@@ -29,18 +29,20 @@ const Articles = ({ articles, authors, flash_delete, flash_update, tags }) => {
         <div className="inner">
           <h2>Articles</h2>
           <hr />
-          {
+          { tags.length != 0 &&
             articles.map((article, index) => (
-              <ul key={index}>
-                <li className="author">
-                  { authors.map(author => {
-                    return author.id === article.author_id ? author.name : ''
-                  })}
-                </li>
-                <li className="title">
-                  <Link to={`/articles/${article.id_react}`}>{article.title}</Link>
-                </li>
-              </ul>
+              article.tags[0].name === tags[0].name
+                ? <ul key={index}>
+                  <li className="author">
+                    {authors.map(author => {
+                      return author.id === article.author_id ? author.name : ''
+                    })}
+                  </li>
+                  <li className="title">
+                    <Link to={`/articles/${article.id_react}`}>{article.title}</Link>
+                  </li>
+                </ul>
+                : null
             ))
           }
         </div>

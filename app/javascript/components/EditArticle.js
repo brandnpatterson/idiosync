@@ -9,6 +9,13 @@ import DeleteForm from './themes/Form'
 
 const req = '/api/v1/articles'
 
+const propTypes = {
+  article: object.isRequired,
+  deleteFlashConfirmation: func.isRequired,
+  updateFlashConfirmation: func.isRequired,
+  getRequest: func.isRequired
+}
+
 class EditArticle extends Component {
   constructor () {
     super()
@@ -155,13 +162,7 @@ class EditArticle extends Component {
     )
   }
 }
-
-EditArticle.propTypes = {
-  article: object.isRequired,
-  deleteFlashConfirmation: func.isRequired,
-  updateFlashConfirmation: func.isRequired,
-  getRequest: func.isRequired
-}
+EditArticle.propTypes = propTypes
 
 const EditArticleWrapper = styled.div`
   margin: 0 auto;

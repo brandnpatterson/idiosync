@@ -9,6 +9,13 @@ import DeleteAuthorForm from './themes/Form'
 
 const req = '/api/v1/authors'
 
+const propTypes = {
+  author: object.isRequired,
+  deleteFlashConfirmation: func.isRequired,
+  updateFlashConfirmation: func.isRequired,
+  getRequest: func.isRequired
+}
+
 class EditAuthor extends Component {
   constructor () {
     super()
@@ -128,12 +135,7 @@ class EditAuthor extends Component {
   }
 }
 
-EditAuthor.propTypes = {
-  author: object.isRequired,
-  deleteFlashConfirmation: func.isRequired,
-  updateFlashConfirmation: func.isRequired,
-  getRequest: func.isRequired
-}
+EditAuthor.propTypes = propTypes
 
 const EditAuthorWrapper = styled.div`
   margin: 0 auto;

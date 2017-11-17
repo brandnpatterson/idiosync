@@ -3,6 +3,11 @@ import { Link } from 'react-router-dom'
 import { array } from 'prop-types'
 import styled from 'styled-components'
 
+const propTypes = {
+  articles: array.isRequired,
+  tags: array.isRequired
+}
+
 const Tags = ({ articles, tags }) => {
   return (
     <TagsDiv>
@@ -20,10 +25,7 @@ const Tags = ({ articles, tags }) => {
   )
 }
 
-Tags.propTypes = {
-  articles: array.isRequired,
-  tags: array.isRequired
-}
+Tags.propTypes = propTypes
 
 const TagsDiv = styled.div `
   background: whitesmoke;

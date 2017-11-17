@@ -4,6 +4,12 @@ import { array, func, string } from 'prop-types'
 import MdSearch from 'react-icons/lib/md/search'
 import styled from 'styled-components'
 
+const propTypes = {
+  filteredArticles: array.isRequired,
+  search: string.isRequired,
+  updateSearch: func.isRequired
+}
+
 const Search = ({ filteredArticles, search, updateSearch }) => {
   return (
     <SearchInput autoComplete="off">
@@ -29,12 +35,7 @@ const Search = ({ filteredArticles, search, updateSearch }) => {
     </SearchInput>
   )
 }
-
-Search.propTypes = {
-  filteredArticles: array.isRequired,
-  search: string.isRequired,
-  updateSearch: func.isRequired
-}
+Search.propTypes = propTypes
 
 const SearchInput = styled.div `
   display: flex;

@@ -3,6 +3,12 @@ import { array, object } from 'prop-types'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
+const propTypes = {
+  authors: array.isRequired,
+  filterByTag: array.isRequired,
+  match: object.isRequired
+}
+
 const FilterByTag = ({ authors, filterByTag, match }) => {
   const filteredArticles = []
   filterByTag.map(itemToFilter => {
@@ -41,12 +47,7 @@ const FilterByTag = ({ authors, filterByTag, match }) => {
     </FilterByTagWrapper>
   )
 }
-
-FilterByTag.propTypes = {
-  authors: array.isRequired,
-  filterByTag: array.isRequired,
-  match: object.isRequired
-}
+FilterByTag.propTypes = propTypes
 
 const FilterByTagWrapper = styled.div `
   background: whitesmoke;

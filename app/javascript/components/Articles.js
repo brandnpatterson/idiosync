@@ -3,9 +3,16 @@ import { Link } from 'react-router-dom'
 import { array, bool } from 'prop-types'
 import styled from 'styled-components'
 
-const Home = ({ articles, authors, flash_delete, flash_update }) => {
+const propTypes = {
+  articles: array.isRequired,
+  authors: array.isRequired,
+  flash_delete: bool.isRequired,
+  flash_update: bool.isRequired
+}
+
+const Articles = ({ articles, authors, flash_delete, flash_update }) => {
   return (
-    <HomeWrapper>
+    <ArticlesWrapper>
       <div className="outer">
         {flash_delete && (
           <div className="flash-message">
@@ -37,18 +44,12 @@ const Home = ({ articles, authors, flash_delete, flash_update }) => {
           }
         </div>
       </div>
-    </HomeWrapper>
+    </ArticlesWrapper>
   )
 }
+Articles.propTypes = propTypes
 
-Home.propTypes = {
-  articles: array.isRequired,
-  authors: array.isRequired,
-  flash_delete: bool.isRequired,
-  flash_update: bool.isRequired
-}
-
-const HomeWrapper = styled.div `
+const ArticlesWrapper = styled.div `
   background: whitesmoke;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1), 0 5px 10px rgba(0, 0, 0, 0.05);
   margin: 5em auto;
@@ -94,4 +95,4 @@ const HomeWrapper = styled.div `
   }
 `
 
-export default Home
+export default Articles

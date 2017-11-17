@@ -8,6 +8,14 @@ import NewAuthorForm from './themes/Form'
 
 const req = '/api/v1/authors'
 
+const propTypes = {
+  articles: array.isRequired,
+  authenticated: bool.isRequired,
+  authors: array.isRequired,
+  createFlashConfirmation: func.isRequired,
+  getRequest: func.isRequired
+}
+
 class NewAuthor extends Component {
   constructor () {
     super()
@@ -85,14 +93,7 @@ class NewAuthor extends Component {
     )
   }
 }
-
-NewAuthor.propType = {
-  articles: array.isRequired,
-  authenticated: bool.isRequired,
-  authors: array.isRequired,
-  createFlashConfirmation: func.isRequired,
-  getRequest: func.isRequired
-}
+NewAuthor.propType = propTypes
 
 const NewAuthorFormWrapper = styled.div `
   textarea {

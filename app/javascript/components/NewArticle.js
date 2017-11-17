@@ -10,6 +10,17 @@ import NotFound from './NotFound'
 
 const req = '/api/v1/articles'
 
+const propTypes = {
+  articles: array.isRequired,
+  authenticated: bool.isRequired,
+  authors: array.isRequired,
+  tags: array.isRequired,
+  flash_create: bool.isRequired,
+  flash_delete: bool.isRequired,
+  flash_update: bool.isRequired,
+  getRequest: func.isRequired
+}
+
 class NewArticle extends Component {
   constructor () {
     super()
@@ -106,7 +117,7 @@ class NewArticle extends Component {
           >
             {a.name}
           </button>
-          <Link to={`authors/edit/${a.id_react}`}>
+          <Link to={`authors/${a.id_react}/edit`}>
             <MdEdit />
           </Link>
         </div>
@@ -212,17 +223,7 @@ class NewArticle extends Component {
     )
   }
 }
-
-NewArticle.propType = {
-  articles: array.isRequired,
-  authenticated: bool.isRequired,
-  authors: array.isRequired,
-  tags: array.isRequired,
-  flash_create: bool.isRequired,
-  flash_delete: bool.isRequired,
-  flash_update: bool.isRequired,
-  getRequest: func.isRequired
-}
+NewArticle.propType = propTypes
 
 const NewArticleWrapper = styled.div `
   .hidden {

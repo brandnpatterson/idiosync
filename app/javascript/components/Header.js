@@ -4,12 +4,19 @@ import { array, bool, func, string } from 'prop-types'
 import styled from 'styled-components'
 import Search from './Search'
 
+const propTypes = {
+  authenticated: bool.isRequired,
+  filteredArticles: array.isRequired,
+  logout: func.isRequired,
+  search: string.isRequired,
+  updateSearch: func.isRequired
+}
+
 const Header = ({ authenticated, filteredArticles, logout, search, updateSearch }) => {
   return (
     <Nav>
       <ul className="left">
-        <li><Link to="/">Idiosync</Link></li>
-        <li><Link to="/articles">Articles</Link></li>
+        <li><Link to="/">Articles</Link></li>
         <li><Link to="/tags">Tags</Link></li>
         <li><Link to="/about">About</Link></li>
       </ul>
@@ -36,13 +43,7 @@ const Header = ({ authenticated, filteredArticles, logout, search, updateSearch 
   )
 }
 
-Header.propTypes = {
-  authenticated: bool.isRequired,
-  filteredArticles: array.isRequired,
-  logout: func.isRequired,
-  search: string.isRequired,
-  updateSearch: func.isRequired
-}
+Header.propTypes = propTypes
 
 const Nav = styled.nav `
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1), 0 5px 10px rgba(0, 0, 0, 0.05);

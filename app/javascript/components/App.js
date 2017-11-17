@@ -4,15 +4,15 @@ import axios from 'axios'
 import styled from 'styled-components'
 
 import About from './About'
+import Article from './Article'
+import Articles from './Articles'
 import EditArticle from './EditArticle'
 import EditAuthor from './EditAuthor'
-import NewArticle from './NewArticle'
-import NewAuthor from './NewAuthor'
 import FilterByTag from './FilterByTag'
-import Home from './Home'
 import Header from './Header'
 import Login from './Login'
-import Article from './Article'
+import NewArticle from './NewArticle'
+import NewAuthor from './NewAuthor'
 import NotFound from './NotFound'
 import Tags from './Tags'
 
@@ -243,15 +243,10 @@ class App extends Component {
           />
         </div>
         <Switch>
-          <Route exact path="/" render={() => (
-            <Link to="/articles">
-              <Background src={landingImg} alt="landing" />
-            </Link>
-          )} />
           { /* Articles */ }
-          {articles && (
-            <Route exact path="/articles" render={() => {
-              return <Home
+          {articles && authors && (
+            <Route exact path="/" render={() => {
+              return <Articles
                 articles={articles}
                 authors={authors}
                 flash_delete={flash_delete}
@@ -276,7 +271,7 @@ class App extends Component {
           )}
           { /* Edit Article by :id */ }
           {articles && (
-            <Route path="/articles/edit/:id" render={({ match }) => {
+            <Route path="/articles/:id/edit" render={({ match }) => {
               return (
                 <EditArticle
                   article={articles.find(a => a.id_react === parseInt(match.params.id, 10))}
@@ -313,7 +308,7 @@ class App extends Component {
           )}
           { /* Edit Author by :id */ }
           {authors && (
-            <Route path="/authors/edit/:id" render={({ match }) => {
+            <Route path="/authors/:id/edit" render={({ match }) => {
               return (
                 <EditAuthor
                   author={authors.find(a => a.id_react === parseInt(match.params.id, 10))}

@@ -4,6 +4,12 @@ import { Link } from 'react-router-dom'
 import MdEdit from 'react-icons/lib/md/edit'
 import styled from 'styled-components'
 
+const propTypes = {
+  article: object.isRequired,
+  articles: array.isRequired,
+  authors: array.isRequired
+}
+
 const Article = ({ article, articles, authors }) => {
   const total = articles.length
   const tags = article.tags
@@ -14,7 +20,7 @@ const Article = ({ article, articles, authors }) => {
         <div>
           <div className="title-wrapper">
             <h2>{article.title}</h2>
-            <Link to={`edit/${article.id_react}`}>
+            <Link to={`${article.id_react}/edit`}>
               <MdEdit />
             </Link>
           </div>
@@ -67,12 +73,7 @@ const Article = ({ article, articles, authors }) => {
     </ArticleWrapper>
   )
 }
-
-Article.propTypes = {
-  article: object.isRequired,
-  articles: array.isRequired,
-  authors: array.isRequired
-}
+Article.propTypes = propTypes
 
 const ArticleWrapper = styled.div`
   margin: 0 auto;

@@ -1,7 +1,9 @@
 {
   "name": "fullapp-idiosync",
   "private": true,
-  "scripts": {},
+  "scripts": {
+    "start": "bin/webpack-dev-server"
+  },
   "dependencies": {
     "@rails/webpacker": "^3.0.2",
     "axios": "^0.16.2",

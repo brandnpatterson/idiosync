@@ -11,6 +11,12 @@ const propTypes = {
 }
 
 const Articles = ({ articles, authors, flash_delete, flash_update }) => {
+  articles.map(article => {
+    article.tags.map(tag => {
+      console.log(tag)
+    })
+  })
+
   return (
     <ArticlesWrapper>
       <div className="outer">

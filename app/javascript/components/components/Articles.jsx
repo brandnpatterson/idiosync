@@ -11,7 +11,7 @@ const propTypes = {
   tags: array.isRequired
 }
 
-const Articles = ({ articles, authors, flash_delete, flash_update, tags }) => {
+const Articles = ({ articles, authors, flash_delete, flash_update, tagNames, tags }) => {
   return (
     <ArticlesWrapper>
       <div className="outer">
@@ -29,22 +29,13 @@ const Articles = ({ articles, authors, flash_delete, flash_update, tags }) => {
         <div className="inner">
           <h2>Articles</h2>
           <hr />
-          { tags.length != 0 &&
-            articles.map((article, index) => (
-              article.tags[0].name === tags[0].name
-                ? <ul key={index}>
-                  <li className="author">
-                    {authors.map(author => {
-                      return author.id === article.author_id ? author.name : ''
-                    })}
-                  </li>
-                  <li className="title">
-                    <Link to={`/articles/${article.id_react}`}>{article.title}</Link>
-                  </li>
-                </ul>
-                : null
-            ))
-          }
+          <div>
+            {tagNames &&
+              tagNames.map(tag => {
+                <h2>{tag}</h2>
+              })
+            }
+          </div>
         </div>
       </div>
     </ArticlesWrapper>
@@ -99,3 +90,21 @@ const ArticlesWrapper = styled.div `
 `
 
 export default Articles
+
+// {
+//   articles.map((article, index) => (
+//     article.tags.name === tagNames[0]
+//       ?
+//       <ul key={index}>
+//         <li className="author">
+//           {authors.map(author => {
+//             return author.id === article.author_id ? author.name : ''
+//           })}
+//         </li>
+//         <li className="title">
+//           <Link to={`/articles/${article.id_react}`}>{article.title}</Link>
+//         </li>
+//       </ul>
+//       : null
+//   ))
+// }

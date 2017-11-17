@@ -35,12 +35,14 @@ class App extends Component {
       email: '',
       password: '',
       search: '',
+      tagNames: [],
       tags: []
     }
   }
 
   componentWillMount () {
     this.getRequest()
+
     let localAuth = localStorage.getItem('authenticated')
     let localTags = localStorage.getItem('tags')
     if (localAuth === 'true') {
@@ -91,7 +93,20 @@ class App extends Component {
           })
         })
       })
+      this.setTagNames()
     }, 2)
+  }
+  
+  setTagNames = () => {
+    const { tags } = this.state
+
+    const tagNames = []
+    for (let i = 0; i < tags.length; i++) {
+      tagNames.push(tags[i].name)
+    }
+    this.setState({
+      tagNames
+    })
   }
 
   setReactIds = () => {
@@ -221,6 +236,7 @@ class App extends Component {
       flash_delete,
       flash_update,
       search,
+      tagNames,
       tags
     } = this.state
 
@@ -259,6 +275,7 @@ class App extends Component {
                 authors={authors}
                 flash_delete={flash_delete}
                 flash_update={flash_update}
+                tagNames={tagNames}
                 tags={tags}
               />
             }} />

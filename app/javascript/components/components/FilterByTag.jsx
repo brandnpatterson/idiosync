@@ -11,6 +11,7 @@ const propTypes = {
 
 const FilterByTag = ({ authors, filterByTag, match }) => {
   const filteredArticles = []
+  
   filterByTag.map(itemToFilter => {
     return itemToFilter.filter(f => {
       if (f !== null) {

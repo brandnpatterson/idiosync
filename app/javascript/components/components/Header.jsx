@@ -16,16 +16,20 @@ const Header = ({ authenticated, filteredArticles, logout, search, updateSearch 
   return (
     <Nav>
       <ul className="left">
-        <li><Link to="/">Articles</Link></li>
-        <li><Link to="/tags">Tags</Link></li>
-        <li><Link to="/about">About</Link></li>
+        <li><Link to="/">Home</Link></li>
+        <li><Link to="/archives">Archive</Link></li>
+        <li><Link to="/about">Editors</Link></li> { /* ABOUT */}
+        <li><Link to="/authors">Contributors</Link></li>
+        {/* <li><Link to="/tags">Tags</Link></li> */}
+        <li><Link to="/submissions">Submissions</Link></li>
       </ul>
       <ul className="right">
-        <li><Search
-              filteredArticles={filteredArticles}
-              search={search}
-              updateSearch={updateSearch}
-            />
+        <li>
+          <Search
+            filteredArticles={filteredArticles}
+            search={search}
+            updateSearch={updateSearch}
+          />
         </li>
       </ul>
       {
@@ -56,7 +60,7 @@ const Nav = styled.nav `
   }
   .left {
     justify-content: space-around;
-    max-width: 20em;
+    max-width: 30em;
   }
   .right {
     justify-content: space-around;

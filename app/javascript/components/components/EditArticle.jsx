@@ -5,7 +5,7 @@ import axios from 'axios'
 import styled from 'styled-components'
 
 import EditArticleForm from './themes/Form'
-import DeleteForm from './themes/Form'
+import DeleteArticleForm from './themes/Form'
 
 const req = '/api/v1/articles'
 
@@ -23,9 +23,8 @@ class EditArticle extends Component {
       id: '',
       title: '',
       content: '',
-      articleTags: '',
-      fireRedirect: false,
-      delete_selected: false
+      tags: '',
+      fireRedirect: false
     }
   }
 
@@ -37,13 +36,13 @@ class EditArticle extends Component {
 
   componentWillMount () {
     const { article } = this.props
-    const articleTags = article.tags.map(tag => tag.name)
+    const tags = article.tags.map(tag => tag.name)
 
     this.setState({
       id: article.id,
       title: article.title,
       content: article.content,
-      tags: articleTags
+      tags: tags
     })
   }
 
@@ -51,7 +50,6 @@ class EditArticle extends Component {
     this.setState({
       fireRedirect: true
     })
-    this.setArticleTags()
     this.props.getRequest()
   }
 
@@ -60,12 +58,14 @@ class EditArticle extends Component {
     const {
       id,
       title,
-      content
+      content,
+      tags
     } = this.state
 
     const articleObj = {
       title,
-      content
+      content,
+      tags
     }
     axios.put(`${req}/${id}`, articleObj)
       .then(() => {
@@ -81,10 +81,10 @@ class EditArticle extends Component {
   deleteArticle = (e) => {
     e.preventDefault()
 
-    this.props.deleteFlashConfirmation()
     axios.delete(`${req}/${this.state.id}`)
       .then(() => {
         this.setStateAndProps()
+        this.props.deleteFlashConfirmation()
       })
       .catch(err => console.log(err))
     setTimeout(() => {
@@ -93,13 +93,14 @@ class EditArticle extends Component {
   }
 
   handleSelectDelete = () => {
-    if (this.state.delete_selected === false) {
+    if (this.state.confirm_delete === false) {
       this.setState({
-        delete_selected: true
+        confirm_delete: true
       })
+      console.log(this.state.confirm_delete)
     } else {
       this.setState({
-        delete_selected: false
+        confirm_delete: false
       })
     }
   }
@@ -109,67 +110,49 @@ class EditArticle extends Component {
       title,
       content,
       tags,
-      delete_selected,
       fireRedirect
     } = this.state
     const { article, from } = this.props || '/'
 
     return (
       <EditArticleWrapper>
-        {
-          !delete_selected && (
-          <div>
-            {/* Edit Article */}
-            <EditArticleForm
-              onSubmit={this.editArticle}
-              method="get"
-              autoComplete="off"
-            >
-              <div className="formgroup">
-                <h2>Edit {article.title}</h2>
-              </div>
-              <div className="formgroup">
-                <label htmlFor="title"> Title:
-                  <input name="title" value={title} onChange={this.onChange} type="text" autoFocus required />
-                </label>
-                <label htmlFor="content"> Content:
-                  <textarea name="content" value={content} onChange={this.onChange} rows="20" required />
-                </label>
-                <label htmlFor="tags"> Tags:
-                  <input name="tags" value={tags} onChange={this.onChange} type="text" required />
-                </label>
-              </div>
-              <div className="formgroup">
-                <input className="button" name="update-article" type="submit" value="Submit Changes" />
-              </div>
-              <div className="formgroup" onClick={this.handleSelectDelete}>
-                <div>
-                  <input className="button button-delete" name="delete-article" type="button" value="Delete" />
-                </div>
-              </div>
-              {/* Redirect */}
-              {fireRedirect && (
-                <Redirect to={from || '/'} />
-              )}
-            </EditArticleForm>
-          </div>
-          )
-        }
-        {/* Delete Article */}
-        {delete_selected && (
-          <DeleteForm
-            onSubmit={this.deleteArticle}
-            method="delete"
+          {/* Edit Article */}
+          <EditArticleForm
+            onSubmit={this.editArticle}
+            method="get"
+            autoComplete="off"
           >
-            <div className="formgroup" onClick={this.handleSelectDelete}>
-              <h3>Are you sure you would like to delete {title}?</h3>
-              <div className="flex">
-                <input className="button button-delete" name="delete-article" type="submit" value="Delete" />
-                <input className="button button-back" name="back-article" type="button" value="Back" />
-              </div>
-            </div>
-          </DeleteForm>
-        )}
+          <div className="formgroup">
+            <h2>Edit {article.title}</h2>
+          </div>
+          <div className="formgroup">
+            <label htmlFor="title"> Title:
+              <input name="title" value={title} onChange={this.onChange} type="text" autoFocus required />
+            </label>
+            <label htmlFor="content"> Content:
+              <textarea name="content" value={content} onChange={this.onChange} rows="20" required />
+            </label>
+            <label htmlFor="tags"> Tags:
+              <input name="tags" value={tags} onChange={this.onChange} type="text" required />
+            </label>
+          </div>
+          <div className="formgroup">
+            <input className="button" name="update-article" type="submit" value="Submit Changes" />
+          </div>
+          {/* Redirect */}
+          {fireRedirect && (
+            <Redirect to={from || '/'} />
+          )}
+        </EditArticleForm>
+        {/* Delete Article */}
+        <DeleteArticleForm
+          onSubmit={this.deleteArticle}
+          method="delete"
+        >
+          <div className="formgroup">
+            <input className="button button-delete" name="delete-article" type="submit" value="Delete" />
+          </div>
+        </DeleteArticleForm>
       </EditArticleWrapper>
     )
   }

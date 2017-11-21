@@ -65,7 +65,7 @@ class App extends Component {
         this.setState({ authors })
         setTimeout(() => {
           this.setTags()
-        }, 2)
+        }, 10)
       })
       .catch(err => console.log(err))
   }
@@ -94,7 +94,7 @@ class App extends Component {
         })
       })
       this.setTagNames()
-    }, 2)
+    }, 10)
   }
   
   setTagNames = () => {
@@ -268,7 +268,7 @@ class App extends Component {
         </div>
         <Switch>
           { /* Articles */ }
-          {articles && authors && (
+          {articles && authors && tags && (
             <Route exact path="/" render={() => {
               return <Articles
                 articles={articles}
@@ -309,7 +309,7 @@ class App extends Component {
             }} />
           )}
           { /* Articles/:id */ }
-          {articles && (
+          {articles && authors && (
             <Route path="/articles/:index" render={({ match }) => {
               return (
                 <Article
@@ -321,7 +321,7 @@ class App extends Component {
             }} />
           )}
           { /* New Author */ }
-          {authors && (
+          {articles && authors && (
             <Route exact path="/new-author" render={() => {
               return <NewAuthor
                 articles={articles}
@@ -346,13 +346,13 @@ class App extends Component {
             }} />
           )}
           { /* Tags */ }
-          {articles && (
+          {articles && tags && (
             <Route exact path="/tags" render={() => {
               return <Tags articles={articles} tags={tags} />
             }} />
           )}
           { /* Tags/:tagName */ }
-          {articles && (
+          {articles && authors && tags && (
             <Route path="/tags/:tagName" render={({ match }) => {
               return (
                 <FilterByTag

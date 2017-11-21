@@ -33,6 +33,8 @@ const Articles = ({
           </div>
         )}
         <h2 className="title">IDIOSYNC</h2>
+        <img className="landing" src="https://pbs.twimg.com/media/CIcACTPUsAAkPfn.jpg:large" alt=""/>
+        <h2 className="title">Make Unicorns Great Again</h2>
         <div className="inner">
           <div>
             {
@@ -110,6 +112,11 @@ const ArticlesWrapper = styled.div `
           text-align: left;
         }
       }
+    }
+    .landing {
+      margin: 0 auto;
+      display: block;
+      width: 300px;
     }
   }
 `

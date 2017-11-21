@@ -23,11 +23,12 @@ class EditArticle extends Component {
       id: '',
       title: '',
       content: '',
+      articleTags: '',
       fireRedirect: false,
       delete_selected: false
     }
   }
-  //
+
   onChange = (e) => {
     this.setState({
       [e.target.name]: e.target.value
@@ -36,10 +37,13 @@ class EditArticle extends Component {
 
   componentWillMount () {
     const { article } = this.props
+    const articleTags = article.tags.map(tag => tag.name)
+
     this.setState({
       id: article.id,
       title: article.title,
-      content: article.content
+      content: article.content,
+      tags: articleTags
     })
   }
 
@@ -47,6 +51,7 @@ class EditArticle extends Component {
     this.setState({
       fireRedirect: true
     })
+    this.setArticleTags()
     this.props.getRequest()
   }
 
@@ -103,6 +108,7 @@ class EditArticle extends Component {
     const {
       title,
       content,
+      tags,
       delete_selected,
       fireRedirect
     } = this.state
@@ -113,6 +119,7 @@ class EditArticle extends Component {
         {
           !delete_selected && (
           <div>
+            {/* Edit Article */}
             <EditArticleForm
               onSubmit={this.editArticle}
               method="get"
@@ -122,42 +129,47 @@ class EditArticle extends Component {
                 <h2>Edit {article.title}</h2>
               </div>
               <div className="formgroup">
-                <label htmlFor="create-article"> Title:
+                <label htmlFor="title"> Title:
                   <input name="title" value={title} onChange={this.onChange} type="text" autoFocus required />
                 </label>
                 <label htmlFor="content"> Content:
                   <textarea name="content" value={content} onChange={this.onChange} rows="20" required />
                 </label>
+                <label htmlFor="tags"> Tags:
+                  <input name="tags" value={tags} onChange={this.onChange} type="text" required />
+                </label>
               </div>
               <div className="formgroup">
-                <input className="button" name="create-article" type="submit" value="Submit Changes" />
+                <input className="button" name="update-article" type="submit" value="Submit Changes" />
               </div>
-              <div className="delete-selected" onClick={this.handleSelectDelete}>
-                <div className="formgroup">
+              <div className="formgroup" onClick={this.handleSelectDelete}>
+                <div>
                   <input className="button button-delete" name="delete-article" type="button" value="Delete" />
                 </div>
               </div>
               {/* Redirect */}
               {fireRedirect && (
-                <Redirect to={from || '/articles'} />
+                <Redirect to={from || '/'} />
               )}
             </EditArticleForm>
           </div>
           )
         }
-        {
-          delete_selected && (
-            <DeleteForm
-              onSubmit={this.deleteArticle}
-              method="delete"
-            >
-              <div className="formgroup">
-                <h3>Are you sure you would like to delete {title}?</h3>
+        {/* Delete Article */}
+        {delete_selected && (
+          <DeleteForm
+            onSubmit={this.deleteArticle}
+            method="delete"
+          >
+            <div className="formgroup" onClick={this.handleSelectDelete}>
+              <h3>Are you sure you would like to delete {title}?</h3>
+              <div className="flex">
                 <input className="button button-delete" name="delete-article" type="submit" value="Delete" />
+                <input className="button button-back" name="back-article" type="button" value="Back" />
               </div>
-            </DeleteForm>
-          )
-        }
+            </div>
+          </DeleteForm>
+        )}
       </EditArticleWrapper>
     )
   }
@@ -176,6 +188,15 @@ const EditArticleWrapper = styled.div`
   }
   .tags {
     color: blue;
+  }
+  .button-back {
+    background: blue !important;
+    margin-left: 30px;
+  }
+  .flex {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 `
 

@@ -11,39 +11,13 @@ const propTypes = {
   tags: array.isRequired
 }
 
-const Articles = ({ articles, authors, flash_delete, flash_update, tagNames, tags }) => {
-
-  const filterByTag = (number) => {
-    let filteredTags = []
-
-    filteredTags = articles.map(article => {
-      return article.tags.map(tag => {
-        if (tag.id === number) {
-          return article
-        } else {
-          return null
-        }
-      })
-    })
-
-    const filteredArticles = []
-    filteredTags.map(itemToFilter => {
-      return itemToFilter.filter(f => {
-        if (f !== null) {
-          return filteredArticles.push(f)
-        } else {
-          return false
-        }
-      })
-    })
-    console.log(filteredArticles)
-  }
-
-  if (tags) {
-    for (var i = 0; i < tags.lengh; i++) {
-      console.log(i)
-    }
-  }
+const Articles = ({ 
+  articles, 
+  authors, 
+  flash_delete, 
+  flash_update, 
+  tagNames, 
+  tags }) => {
 
   return (
     <ArticlesWrapper>
@@ -60,26 +34,31 @@ const Articles = ({ articles, authors, flash_delete, flash_update, tagNames, tag
         )}
         <h2 className="title">IDIOSYNC</h2>
         <div className="inner">
-          <h2>Articles</h2>
-          <hr />
           <div>
             {
-              articles.map((article, index) => {
-                return (
-                  <div key={index}>
-                    <ul>
-                      <li className="author">
-                        {authors.map(author => {
-                          return author.id === article.author_id ? author.name : ''
-                        })}
-                      </li>
-                      <li className="title">
-                        <Link to={`/articles/${article.id_react}`}>{article.title}</Link>
-                      </li>
-                    </ul>
-                  </div>
-                )
-              })
+              tags.map((tag, tagIndex) => (
+                <div key={tagIndex}>
+                  <h2>{tag.name}</h2>
+                  {articles.map((article, articleIndex) => {
+                    return article.tags.map(articleTag => {
+                      return articleTag.id === tag.id
+                        ? <div key={articleIndex}>
+                          <ul>
+                            <li className="author">
+                              {authors.map(author => {
+                                return author.id === article.author_id ? author.name : ''
+                              })}
+                            </li>
+                            <li className="title">
+                              <Link to={`/articles/${article.id_react}`}>{article.title}</Link>
+                            </li>
+                          </ul>
+                        </div>
+                        : null
+                    })
+                  })}
+                </div>
+              ))
             }
           </div>
         </div>
@@ -136,5 +115,3 @@ const ArticlesWrapper = styled.div `
 `
 
 export default Articles
-
- 

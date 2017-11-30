@@ -29,7 +29,8 @@ class NewArticle extends Component {
       content: '',
       new_article: false,
       tag_list: '',
-      title: ''
+      title: '',
+      flash_author_required: false
     }
   }
 
@@ -41,28 +42,35 @@ class NewArticle extends Component {
 
   postArticle = (e) => {
     e.preventDefault()
-    const articleObj = {
-      title: this.state.title,
-      content: this.state.content,
-      author_id: this.state.author_id,
-      tag_list: this.state.tag_list,
-      new_article: this.state.new_article
+
+    if (this.state.author_id === '') {
+      this.handleAuthorRequired()
+      return
     }
-    axios.post(req, articleObj)
-      .then(() => {
-        this.setState({
-          title: '',
-          content: '',
-          author_id: '',
-          tag_list: '',
-          new_article: true
+    if (this.state.flash_author_required === false) {
+      const articleObj = {
+        title: this.state.title,
+        content: this.state.content,
+        author_id: this.state.author_id,
+        tag_list: this.state.tag_list,
+        new_article: this.state.new_article
+      }
+      axios.post(req, articleObj)
+        .then(() => {
+          this.setState({
+            title: '',
+            content: '',
+            author_id: '',
+            tag_list: '',
+            new_article: true
+          })
         })
-      })
-      .then(() => {
-        window.scrollTo(0, 0)
-        this.props.getRequest()
-      })
-      .catch(err => console.log(err))
+        .then(() => {
+          window.scrollTo(0, 0)
+          this.props.getRequest()
+        })
+        .catch(err => console.log(err))
+    }
   }
 
   setActiveAuthor = (id) => {
@@ -82,7 +90,21 @@ class NewArticle extends Component {
       data.active = 'false'
     }
     e.target.classList.toggle('active')
+  }
 
+  handleAuthorRequired = () => {
+    if (this.state.author_id === '') {
+      if (this.state.flash_author_required === false) {
+        this.setState({
+          flash_author_required: true
+        })
+      }
+      setTimeout(() => {
+        this.setState({
+          flash_author_required: false
+        })
+      }, 2000)
+    }
   }
 
   render () {
@@ -91,7 +113,8 @@ class NewArticle extends Component {
       content,
       author_id,
       tag_list,
-      new_article
+      new_article,
+      flash_author_required
     } = this.state
     const { authors, tags, flash_create, flash_delete, flash_update } = this.props
 
@@ -147,7 +170,7 @@ class NewArticle extends Component {
           </button>
         </div>
     ))
-
+    
     return (
       <NewArticleWrapper>
         {this.props.authenticated === true
@@ -174,6 +197,11 @@ class NewArticle extends Component {
             {flash_update && (
               <div className="flash-message">
                 <h4>Author updated successfully!</h4>
+              </div>
+            )}
+            {flash_author_required && (
+              <div className="flash-message">
+                <h4>Author Required. Select or create a new author.</h4>
               </div>
             )}
             <div className="formgroup">
@@ -215,7 +243,9 @@ class NewArticle extends Component {
               </label>
             </div>
             <div className="formgroup">
-              <input className="post-data button" name="create-article" type="submit" value="Create Article" />
+              <input 
+                     className="post-data button" 
+                     name="create-article" type="submit" value="Create Article" />
             </div>
           </NewArticleForm>
         : <NotFound />}

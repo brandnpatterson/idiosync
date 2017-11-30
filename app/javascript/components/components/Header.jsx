@@ -18,9 +18,8 @@ const Header = ({ authenticated, filteredArticles, logout, search, updateSearch 
       <ul className="left">
         <li><Link to="/">Home</Link></li>
         <li><Link to="/archives">Archive</Link></li>
-        <li><Link to="/about">Editors</Link></li> { /* ABOUT */}
-        <li><Link to="/authors">Contributors</Link></li>
-        {/* <li><Link to="/tags">Tags</Link></li> */}
+        <li><Link to="/editors">Editors</Link></li>
+        <li><Link to="/contributors">Contributors</Link></li>
         <li><Link to="/submissions">Submissions</Link></li>
       </ul>
       <ul className="right">

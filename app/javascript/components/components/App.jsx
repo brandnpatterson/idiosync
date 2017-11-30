@@ -3,7 +3,7 @@ import { Link, Switch, Route } from 'react-router-dom'
 import axios from 'axios'
 import styled from 'styled-components'
 
-import About from './About'
+import Submissions from './Submissions'
 import Article from './Article'
 import Articles from './Articles'
 import EditArticle from './EditArticle'
@@ -29,13 +29,13 @@ class App extends Component {
       articles: null,
       authenticated: true,
       authors: null,
+      confirm_delete: false,
       flash_create: false,
       flash_delete: false,
       flash_update: false,
       email: '',
       password: '',
       search: '',
-      tagNames: [],
       tags: []
     }
   }
@@ -44,7 +44,7 @@ class App extends Component {
     this.getRequest()
 
     let localAuth = localStorage.getItem('authenticated')
-    let localTags = localStorage.getItem('tags')
+    
     if (localAuth === 'true') {
       this.setState({
         authenticated: true
@@ -65,13 +65,13 @@ class App extends Component {
         this.setState({ authors })
         setTimeout(() => {
           this.setTags()
-        }, 10)
+        }, 20)
       })
       .catch(err => console.log(err))
   }
 
   setTags = () => {
-    const { articles, tags, tagNames } = this.state
+    const { articles, tags } = this.state
     // access each article.tags to be used in tags state
     setTimeout(() => {
       articles.forEach(article => {
@@ -93,20 +93,7 @@ class App extends Component {
           })
         })
       })
-      this.setTagNames()
-    }, 10)
-  }
-  
-  setTagNames = () => {
-    const { tags } = this.state
-
-    const tagNames = []
-    for (let i = 0; i < tags.length; i++) {
-      tagNames.push(tags[i].name)
-    }
-    this.setState({
-      tagNames
-    })
+    }, 20)
   }
 
   setReactIds = () => {
@@ -115,15 +102,7 @@ class App extends Component {
     function setYearVersion (data, year) {
       data.filter((article, index) => {
         if (article.created_at.startsWith(year)) {
-          const tagIds = articles.map(article => {
-            article.tags.map(tag => {
-              return article.id_tag = article.tag
-            })
-          })
-          return [
-            article.id_react = index + 1,
-            tagIds
-          ]
+          return article.id_react = index + 1
         }
       })
     }
@@ -190,6 +169,24 @@ class App extends Component {
     })
   }
 
+  // delete confirmation
+  deleteConfirmation = () => {
+    if (this.state.confirm_delete === false) {
+      this.setState({
+        confirm_delete: true
+      })
+    } else {
+      this.setState({
+        confirm_delete: false
+      })
+    }
+    setTimeout(() => {
+      this.setState({
+        confirm_delete: false
+      })
+    }, 6000)
+  }
+
   // flash
   createFlashConfirmation = () => {
     if (this.state.flash_create === false) {
@@ -232,11 +229,11 @@ class App extends Component {
       articles,
       authenticated,
       authors,
+      confirm_delete,
       flash_create,
       flash_delete,
       flash_update,
       search,
-      tagNames,
       tags
     } = this.state
 
@@ -275,7 +272,6 @@ class App extends Component {
                 authors={authors}
                 flash_delete={flash_delete}
                 flash_update={flash_update}
-                tagNames={tagNames}
                 tags={tags}
               />
             }} />
@@ -301,9 +297,13 @@ class App extends Component {
               return (
                 <EditArticle
                   article={articles.find(a => a.id_react === parseInt(match.params.id, 10))}
+                  articles={articles}
                   deleteFlashConfirmation={this.deleteFlashConfirmation}
                   updateFlashConfirmation={this.updateFlashConfirmation}
                   getRequest={this.getRequest}
+                  confirm_delete={confirm_delete}
+                  deleteConfirmation={this.deleteConfirmation}
+                  tags={tags}
                 />
               )
             }} />
@@ -341,6 +341,8 @@ class App extends Component {
                   deleteFlashConfirmation={this.deleteFlashConfirmation}
                   updateFlashConfirmation={this.updateFlashConfirmation}
                   getRequest={this.getRequest}
+                  confirm_delete={confirm_delete}
+                  deleteConfirmation={this.deleteConfirmation}
                 />
               )
             }} />
@@ -384,7 +386,7 @@ class App extends Component {
               updatePassword={this.updatePassword}
             />
           }} />
-          <Route exact path="/about" component={About} />
+          <Route exact path="/submissions" component={Submissions} />
           {articles && authors && (
             <Route component={NotFound} />
           )}

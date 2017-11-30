@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { array, bool } from 'prop-types'
 import styled from 'styled-components'
@@ -11,62 +11,58 @@ const propTypes = {
   tags: array.isRequired
 }
 
-const Articles = ({ 
-  articles, 
-  authors, 
-  flash_delete, 
-  flash_update, 
-  tagNames, 
-  tags }) => {
+class Articles extends Component {
 
-  return (
-    <ArticlesWrapper>
-      <div className="outer">
-        {flash_delete && (
-          <div className="flash-message">
-            <h4>Article deleted successfully!</h4>
-          </div>
-        )}
-        {flash_update && (
-          <div className="flash-message">
-            <h4>Article updated successfully!</h4>
-          </div>
-        )}
-        <h2 className="title">IDIOSYNC</h2>
-        <img className="landing" src="https://pbs.twimg.com/media/CIcACTPUsAAkPfn.jpg:large" alt=""/>
-        <h2 className="title">Make Unicorns Great Again</h2>
-        <div className="inner">
-          <div>
-            {
-              tags.map((tag, tagIndex) => (
+  render () {
+    const { articles, authors, tags, flash_delete, flash_update } = this.props
+
+    return (
+      <ArticlesWrapper>
+        <div className="outer">
+          {flash_delete && (
+            <div className="flash-message">
+              <h4>Article deleted successfully!</h4>
+            </div>
+          )}
+          {flash_update && (
+            <div className="flash-message">
+              <h4>Article updated successfully!</h4>
+            </div>
+          )}
+          <h2 className="title">IDIOSYNC</h2>
+          <img className="landing" src="https://pbs.twimg.com/media/CIcACTPUsAAkPfn.jpg:large" alt="" />
+          <h2 className="title">Make Unicorns Great Again</h2>
+          <div className="inner">
+            <div>
+              {tags.map((tag, tagIndex) => (
                 <div key={tagIndex}>
-                  <h2>{tag.name}</h2>
-                  {articles.map((article, articleIndex) => {
-                    return article.tags.map(articleTag => {
-                      return articleTag.id === tag.id
-                        ? <div key={articleIndex}>
-                          <ul>
-                            <li className="author">
-                              {authors.map(author => {
-                                return author.id === article.author_id ? author.name : ''
-                              })}
-                            </li>
-                            <li className="title">
-                              <Link to={`/articles/${article.id_react}`}>{article.title}</Link>
-                            </li>
-                          </ul>
-                        </div>
-                        : null
-                    })
-                  })}
+                <h2>{tag.name}</h2>
+                {articles.map((article, articleIndex) => {
+                  return article.tags.map(articleTag => {
+                    return articleTag.id === tag.id
+                      ? <div key={articleIndex}>
+                        <ul>
+                          <li className="author">
+                            {authors.map(author => {
+                              return author.id === article.author_id ? author.name : ''
+                            })}
+                          </li>
+                          <li className="title">
+                            <Link to={`/articles/${article.id_react}`}>{article.title}</Link>
+                          </li>
+                        </ul>
+                      </div>
+                      : null
+                  })
+                })}
                 </div>
-              ))
-            }
+              ))}
+            </div>
           </div>
         </div>
-      </div>
-    </ArticlesWrapper>
-  )
+      </ArticlesWrapper>
+    )
+  }
 }
 Articles.propTypes = propTypes
 

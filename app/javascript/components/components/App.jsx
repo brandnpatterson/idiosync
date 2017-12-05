@@ -3,7 +3,8 @@ import { Link, Switch, Route } from 'react-router-dom'
 import axios from 'axios'
 import styled from 'styled-components'
 
-import Submissions from './Submissions'
+import Archive from './Archive'
+import Archives from './Archives'
 import Article from './Article'
 import Articles from './Articles'
 import EditArticle from './EditArticle'
@@ -14,6 +15,7 @@ import Login from './Login'
 import NewArticle from './NewArticle'
 import NewAuthor from './NewAuthor'
 import NotFound from './NotFound'
+import Submissions from './Submissions'
 import Tags from './Tags'
 
 const landingImg = 'images/landing.jpg'
@@ -36,7 +38,8 @@ class App extends Component {
       email: '',
       password: '',
       search: '',
-      tags: []
+      tags: [],
+      year: '2017'
     }
   }
 
@@ -53,19 +56,25 @@ class App extends Component {
   }
 
   getRequest = () => {
+    const { year } = this.state
+    
+    axios.get(reqAuthors)
+      .then(res => {
+        const authors = res.data
+        authors.filter(author => {
+          if (author.created_at.startsWith(year)) {
+            this.setState({ authors })
+          }
+        })
+        setTimeout(() => {
+          this.setTags()
+        }, 20)
+      })
+      .catch(err => console.log(err))
     axios.get(reqArticles)
       .then(res => {
         const articles = res.data
         this.setState({ articles })
-      })
-      .catch(err => console.log(err))
-    axios.get(reqAuthors)
-      .then(res => {
-        const authors = res.data
-        this.setState({ authors })
-        setTimeout(() => {
-          this.setTags()
-        }, 20)
       })
       .catch(err => console.log(err))
   }
@@ -98,16 +107,10 @@ class App extends Component {
 
   setReactIds = () => {
     const { articles, authors } = this.state
-
-    function setYearVersion (data, year) {
-      data.filter((article, index) => {
-        if (article.created_at.startsWith(year)) {
-          return article.id_react = index + 1
-        }
-      })
-    }
-    setYearVersion(articles, '2017')
-    setYearVersion(authors, '2017')
+    
+    articles.filter((article, index) => {
+      return article.id_react = index + 1
+    })
   }
 
   // authentication
@@ -224,7 +227,20 @@ class App extends Component {
     }
   }
 
+  changeYear = (setYear) => {
+    const { authors, year } = this.state
+
+    this.setState({
+      year: setYear
+    })
+    setTimeout(() => {
+      console.log('It is the year ' + year)
+      this.getRequest()
+    }, 20)
+  }
+
   render () {
+
     const {
       articles,
       authenticated,
@@ -269,6 +285,7 @@ class App extends Component {
             <Route exact path="/" render={() => {
               return <Articles
                 articles={articles}
+                changeYear={this.changeYear}
                 authors={authors}
                 flash_delete={flash_delete}
                 flash_update={flash_update}
@@ -386,7 +403,34 @@ class App extends Component {
               updatePassword={this.updatePassword}
             />
           }} />
+          { /* Artichives */ }
           <Route exact path="/submissions" component={Submissions} />
+          {articles && authors && tags && (
+            <Route exact path="/a" render={() => {
+              return <Archives
+                articles={articles}
+                authors={authors}
+                flash_delete={flash_delete}
+                flash_update={flash_update}
+                tags={tags}
+              />
+            }} />
+          )}
+          { /* Archives/:archive */ }
+          {articles && authors && tags && (
+            <Route exact path="/a/:archive" render={({ match }) => {
+              return <Archive
+                articles={articles}
+                authors={authors}
+                changeYear={this.changeYear}
+                flash_delete={flash_delete}
+                flash_update={flash_update}
+                match={match}
+                tags={tags}
+                year={parseInt(match.params.archive, 10)}
+              />
+            }} />
+          )}
           {articles && authors && (
             <Route component={NotFound} />
           )}

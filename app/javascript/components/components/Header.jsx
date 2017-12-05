@@ -17,7 +17,7 @@ const Header = ({ authenticated, filteredArticles, logout, search, updateSearch 
     <Nav>
       <ul className="left">
         <li><Link to="/">Home</Link></li>
-        <li><Link to="/archives">Archive</Link></li>
+        <li><Link to="/a">Archive</Link></li>
         <li><Link to="/editors">Editors</Link></li>
         <li><Link to="/contributors">Contributors</Link></li>
         <li><Link to="/submissions">Submissions</Link></li>

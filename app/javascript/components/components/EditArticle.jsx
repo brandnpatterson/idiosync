@@ -76,10 +76,10 @@ class EditArticle extends Component {
       .then(() => {
         this.setStateAndProps()
       })
+      .then(() => {
+        window.location.reload()
+      })
       .catch(err => console.log(err))
-    setTimeout(() => {
-      this.props.updateFlashConfirmation()
-    }, 2000)
   }
 
   deleteArticle = (e) => {

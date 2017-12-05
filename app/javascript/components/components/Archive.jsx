@@ -11,18 +11,16 @@ const propTypes = {
   tags: array.isRequired
 }
 
-class Articles extends Component {
+class Archive extends Component {
   componentWillMount () {
-    const { changeYear } = this.props
+    const { changeYear, match } = this.props
     
-    changeYear('2017')
+    changeYear(match.params.archive)
   }
-
-  render () {
-    const { articles, authors, tags, flash_delete, flash_update } = this.props
-
+  render() {
+    const { articles, authors, tags, flash_delete, flash_update, match } = this.props
     return (
-      <ArticlesWrapper>
+      <ArchiveWrapper>
         <div className="outer">
           {flash_delete && (
             <div className="flash-message">
@@ -41,37 +39,37 @@ class Articles extends Component {
             <div>
               {tags.map((tag, tagIndex) => (
                 <div key={tagIndex}>
-                <h2>{tag.name}</h2>
-                {articles.map((article, articleIndex) => {
-                  return article.tags.map(articleTag => {
-                    return articleTag.id === tag.id
-                      ? <div key={articleIndex}>
-                        <ul>
-                          <li className="author">
-                            {authors.map(author => {
-                              return author.id === article.author_id ? author.name : ''
-                            })}
-                          </li>
-                          <li className="title">
-                            <Link to={`/articles/${article.id_react}`}>{article.title}</Link>
-                          </li>
-                        </ul>
-                      </div>
-                      : null
-                  })
-                })}
+                  <h2>{tag.name}</h2>
+                  {articles.map((article, articleIndex) => {
+                    return article.tags.map(articleTag => {
+                      return articleTag.id === tag.id
+                        ? <div key={articleIndex}>
+                          <ul>
+                            <li className="author">
+                              {authors.map(author => {
+                                return author.id === article.author_id ? author.name : ''
+                              })}
+                            </li>
+                            <li className="title">
+                              <Link to={`/articles/${article.id_react}`}>{article.title}</Link>
+                            </li>
+                          </ul>
+                        </div>
+                        : null
+                    })
+                  })}
                 </div>
               ))}
             </div>
           </div>
         </div>
-      </ArticlesWrapper>
+      </ArchiveWrapper>
     )
   }
 }
-Articles.propTypes = propTypes
+Archive.propTypes = propTypes
 
-const ArticlesWrapper = styled.div `
+const ArchiveWrapper = styled.div`
   background: whitesmoke;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1), 0 5px 10px rgba(0, 0, 0, 0.05);
   margin: 5em auto;
@@ -122,4 +120,4 @@ const ArticlesWrapper = styled.div `
   }
 `
 
-export default Articles
+export default Archive

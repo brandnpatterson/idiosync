@@ -233,10 +233,6 @@ class App extends Component {
     this.setState({
       year: setYear
     })
-    setTimeout(() => {
-      console.log('It is the year ' + year)
-      this.getRequest()
-    }, 20)
   }
 
   render () {
@@ -424,6 +420,7 @@ class App extends Component {
                 authors={authors}
                 changeYear={this.changeYear}
                 flash_delete={flash_delete}
+                getRequest={this.getRequest}
                 flash_update={flash_update}
                 match={match}
                 tags={tags}

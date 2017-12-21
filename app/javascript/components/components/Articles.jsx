@@ -19,8 +19,8 @@ class Articles extends Component {
   }
 
   render () {
-    const { articles, authors, tags, flash_delete, flash_update } = this.props
-
+    const { articles, authors, tags, flash_delete, flash_update, year } = this.props
+    
     return (
       <ArticlesWrapper>
         <div className="outer">

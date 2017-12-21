@@ -29,6 +29,7 @@ class App extends Component {
     super()
     this.state = {
       articles: null,
+      articlesPreYear: null,
       authenticated: true,
       authors: null,
       confirm_delete: false,
@@ -44,10 +45,11 @@ class App extends Component {
   }
 
   componentWillMount () {
+    const { articles, authors } = this.state
+    
     this.getRequest()
 
     let localAuth = localStorage.getItem('authenticated')
-    
     if (localAuth === 'true') {
       this.setState({
         authenticated: true
@@ -73,17 +75,18 @@ class App extends Component {
       .catch(err => console.log(err))
     axios.get(reqArticles)
       .then(res => {
-        const articles = res.data
-        this.setState({ articles })
+        const articlesPreYear = res.data
+        this.setState({ articlesPreYear })
       })
       .catch(err => console.log(err))
+    setTimeout(() => this.setNewIds(), 0)
   }
 
   setTags = () => {
-    const { articles, tags } = this.state
+    const { articlesPreYear, tags } = this.state
     // access each article.tags to be used in tags state
     setTimeout(() => {
-      articles.forEach(article => {
+      articlesPreYear.forEach(article => {
         article.tags.forEach(tag => {
           // article.tag => tags
           tags.push(tag)
@@ -91,7 +94,7 @@ class App extends Component {
           const reducedTags = tags.reduce((first, second) => {
             // if the next object's id is not found in the output array
             if (!first.some((el) => {
-              return el.id === second.id;
+              return el.id === second.id
             }))
             // push the object into the output array
             first.push(second)
@@ -105,12 +108,20 @@ class App extends Component {
     }, 20)
   }
 
-  setReactIds = () => {
-    const { articles, authors } = this.state
+  setNewIds = () => {
+    const { articles, articlesPreYear, authors, year } = this.state
     
-    articles.filter((article, index) => {
-      return article.id_react = index + 1
+    const articlesByYear = []
+
+    articlesPreYear.filter((article, index) => {
+      const id_react = article.id_react = index + 1
+      const id_year = article.id_year = article.created_at.substr(0, 4)
+
+      if (article.id_year === year) {
+        articlesByYear.push(article)
+      }
     })
+    this.setState({ articles: articlesByYear })
   }
 
   // authentication
@@ -236,7 +247,6 @@ class App extends Component {
   }
 
   render () {
-
     const {
       articles,
       authenticated,
@@ -246,7 +256,8 @@ class App extends Component {
       flash_delete,
       flash_update,
       search,
-      tags
+      tags,
+      year
     } = this.state
 
     let filteredArticles = []
@@ -259,10 +270,6 @@ class App extends Component {
     }
 
     filteredArticles.length = 3
-
-    if (articles && authors) {
-      this.setReactIds()
-    }
 
     return (
       <AppWrapper>
@@ -286,6 +293,7 @@ class App extends Component {
                 flash_delete={flash_delete}
                 flash_update={flash_update}
                 tags={tags}
+                year={year}
               />
             }} />
           )}
@@ -399,7 +407,7 @@ class App extends Component {
               updatePassword={this.updatePassword}
             />
           }} />
-          { /* Artichives */ }
+          { /* Archives */ }
           <Route exact path="/submissions" component={Submissions} />
           {articles && authors && tags && (
             <Route exact path="/a" render={() => {
@@ -424,7 +432,7 @@ class App extends Component {
                 flash_update={flash_update}
                 match={match}
                 tags={tags}
-                year={parseInt(match.params.archive, 10)}
+                year={year}
               />
             }} />
           )}

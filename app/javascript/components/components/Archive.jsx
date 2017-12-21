@@ -12,14 +12,16 @@ const propTypes = {
 }
 
 class Archive extends Component {
-  componentDidMount () {
+  componentWillMount () {
     const { changeYear, getRequest, match } = this.props
     
     changeYear(match.params.archive)
     getRequest()
   }
+  
   render() {
-    const { articles, authors, tags, flash_delete, flash_update, match } = this.props
+    const { articles, authors, tags, flash_delete, flash_update, match, year } = this.props
+
     return (
       <ArchiveWrapper>
         <div className="outer">

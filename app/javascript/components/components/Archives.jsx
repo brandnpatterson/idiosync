@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-const Archive = () => {
+const Archives = () => {
 
   return (
     <div>
@@ -14,4 +14,4 @@ const Archive = () => {
   )
 }
 
-export default Archive
+export default Archives

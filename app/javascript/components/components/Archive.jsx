@@ -13,14 +13,19 @@ const propTypes = {
 
 class Archive extends Component {
   componentWillMount () {
-    const { changeYear, getRequest, match } = this.props
+    const { changeQuarter, getRequest, match, quarter } = this.props
     
-    changeYear(match.params.archive)
-    getRequest()
+    changeQuarter('3')
+    setTimeout(() => {
+      getRequest()
+    }, 10)
   }
   
   render() {
-    const { articles, authors, tags, flash_delete, flash_update, match, year } = this.props
+    const { articles, authors, tags, flash_delete, flash_update, match, quarter } = this.props
+
+    console.log(authors)
+
 
     return (
       <ArchiveWrapper>

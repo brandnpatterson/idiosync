@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import { Link, Switch, Route } from 'react-router-dom'
 import axios from 'axios'
+import moment from 'moment'
 import styled from 'styled-components'
 
 import Archive from './Archive'
-import Archives from './Archives'
+import ArchiveList from './ArchiveList'
 import Article from './Article'
 import Articles from './Articles'
 import EditArticle from './EditArticle'
@@ -29,7 +30,6 @@ class App extends Component {
     super()
     this.state = {
       articles: null,
-      articlesPreYear: null,
       authenticated: true,
       authors: null,
       confirm_delete: false,
@@ -38,9 +38,9 @@ class App extends Component {
       flash_update: false,
       email: '',
       password: '',
+      quarter: moment().format('Q'),
       search: '',
-      tags: [],
-      year: '2017'
+      tags: []
     }
   }
 
@@ -58,35 +58,41 @@ class App extends Component {
   }
 
   getRequest = () => {
-    const { year } = this.state
+    const { quarter } = this.state
     
     axios.get(reqAuthors)
       .then(res => {
         const authors = res.data
-        authors.filter(author => {
-          if (author.created_at.startsWith(year)) {
-            this.setState({ authors })
-          }
-        })
-        setTimeout(() => {
-          this.setTags()
-        }, 20)
+        this.setState({ authors })
       })
       .catch(err => console.log(err))
     axios.get(reqArticles)
       .then(res => {
-        const articlesPreYear = res.data
-        this.setState({ articlesPreYear })
+        const articlesPreQuarter = res.data
+        const articlesByQuarter = []
+        articlesPreQuarter.filter((article, index) => {
+          article.id_react = index + 1
+          article.id_quarter = moment(article.created_at).format('Q')
+
+          if (article.created_at.startsWith('2017-12')) {
+            article.id_quarter = '3'
+          }
+          
+          if (article.id_quarter === quarter) {
+            articlesByQuarter.push(article)
+          }
+        })
+        this.setState({ articles: articlesByQuarter })
+        this.setTags()
       })
       .catch(err => console.log(err))
-    setTimeout(() => this.setNewIds(), 0)
   }
 
   setTags = () => {
-    const { articlesPreYear, tags } = this.state
-    // access each article.tags to be used in tags state
+    const { articles, tags } = this.state
+    // access each articles.tags to be used in tags state
     setTimeout(() => {
-      articlesPreYear.forEach(article => {
+      articles.forEach(article => {
         article.tags.forEach(tag => {
           // article.tag => tags
           tags.push(tag)
@@ -96,8 +102,8 @@ class App extends Component {
             if (!first.some((el) => {
               return el.id === second.id
             }))
-            // push the object into the output array
-            first.push(second)
+              // push the object into the output array
+              first.push(second)
             return first
           }, [])
           this.setState({
@@ -105,23 +111,7 @@ class App extends Component {
           })
         })
       })
-    }, 20)
-  }
-
-  setNewIds = () => {
-    const { articles, articlesPreYear, authors, year } = this.state
-    
-    const articlesByYear = []
-
-    articlesPreYear.filter((article, index) => {
-      const id_react = article.id_react = index + 1
-      const id_year = article.id_year = article.created_at.substr(0, 4)
-
-      if (article.id_year === year) {
-        articlesByYear.push(article)
-      }
-    })
-    this.setState({ articles: articlesByYear })
+    }, 30)
   }
 
   // authentication
@@ -238,11 +228,11 @@ class App extends Component {
     }
   }
 
-  changeYear = (setYear) => {
-    const { authors, year } = this.state
-
+  changeQuarter = (setQuarter) => {
+    const { authors, quarter } = this.state
+    
     this.setState({
-      year: setYear
+      quarter: setQuarter
     })
   }
 
@@ -255,9 +245,9 @@ class App extends Component {
       flash_create,
       flash_delete,
       flash_update,
+      quarter,
       search,
-      tags,
-      year
+      tags
     } = this.state
 
     let filteredArticles = []
@@ -270,7 +260,7 @@ class App extends Component {
     }
 
     filteredArticles.length = 3
-
+    
     return (
       <AppWrapper>
         <div onClick={this.resetSearch}>
@@ -288,12 +278,13 @@ class App extends Component {
             <Route exact path="/" render={() => {
               return <Articles
                 articles={articles}
-                changeYear={this.changeYear}
+                changeQuarter={this.changeQuarter}
                 authors={authors}
                 flash_delete={flash_delete}
                 flash_update={flash_update}
+                getRequest={this.getRequest}
+                quarter={quarter}
                 tags={tags}
-                year={year}
               />
             }} />
           )}
@@ -407,11 +398,11 @@ class App extends Component {
               updatePassword={this.updatePassword}
             />
           }} />
-          { /* Archives */ }
+          { /* ArchiveList */ }
           <Route exact path="/submissions" component={Submissions} />
           {articles && authors && tags && (
             <Route exact path="/a" render={() => {
-              return <Archives
+              return <ArchiveList
                 articles={articles}
                 authors={authors}
                 flash_delete={flash_delete}
@@ -420,19 +411,19 @@ class App extends Component {
               />
             }} />
           )}
-          { /* Archives/:archive */ }
+          { /* ArchiveList/:archive */ }
           {articles && authors && tags && (
             <Route exact path="/a/:archive" render={({ match }) => {
               return <Archive
                 articles={articles}
                 authors={authors}
-                changeYear={this.changeYear}
+                changeQuarter={this.changeQuarter}
                 flash_delete={flash_delete}
                 getRequest={this.getRequest}
                 flash_update={flash_update}
                 match={match}
+                quarter={quarter}
                 tags={tags}
-                year={year}
               />
             }} />
           )}

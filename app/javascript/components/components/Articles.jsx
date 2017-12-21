@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { array, bool } from 'prop-types'
+import moment from 'moment'
 import styled from 'styled-components'
 
 const propTypes = {
@@ -13,14 +14,17 @@ const propTypes = {
 
 class Articles extends Component {
   componentWillMount () {
-    const { changeYear } = this.props
-    
-    changeYear('2017')
+    const { changeQuarter, getRequest, quarter } = this.props
+
+    changeQuarter(moment().format('Q'))
+    setTimeout(() => {
+      getRequest()
+    }, 10)
   }
 
   render () {
-    const { articles, authors, tags, flash_delete, flash_update, year } = this.props
-    
+    const { articles, authors, tags, flash_delete, flash_update, quarter } = this.props
+
     return (
       <ArticlesWrapper>
         <div className="outer">

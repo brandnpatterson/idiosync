@@ -42,7 +42,8 @@ class App extends Component {
       quarter: null,
       search: '',
       tags: [],
-      tagsByQuarter: []
+      tagsByQuarter: [],
+      year: moment().format('YYYY')
     }
   }
 
@@ -277,7 +278,8 @@ class App extends Component {
       quarter,
       search,
       tags,
-      tagsByQuarter
+      tagsByQuarter,
+      year
     } = this.state
 
     let filteredArticles = []
@@ -313,6 +315,7 @@ class App extends Component {
                 getRequest={this.getRequest}
                 quarter={quarter}
                 tagsByQuarter={tagsByQuarter}
+                year={year}
               />
             }} />
           )}
@@ -333,7 +336,7 @@ class App extends Component {
           )}
           { /* Edit Article by :id */ }
           {articles && (
-            <Route path="/articles/:id/edit" render={({ match }) => {
+            <Route path={`/${year}/Q${quarter}/:id/edit`} render={({ match }) => {
               return (
                 <EditArticle
                   article={articles.find(a => a.id_react === parseInt(match.params.id, 10))}
@@ -350,13 +353,15 @@ class App extends Component {
           )}
           { /* Articles/:id */ }
           {articles && authors && (
-            <Route path={`/articles/:index`} render={({ match }) => {
+            <Route path={`/${year}/Q${quarter}/:index`} render={({ match }) => {
               return (
                 <Article
                   article={articles.find(a => a.id_react === parseInt(match.params.index, 10))}
                   articles={articles}
                   articlesByQuarter={articlesByQuarter}
                   authors={authors}
+                  quarter={quarter}
+                  year={year}
                 />
               )
             }} />
@@ -396,7 +401,7 @@ class App extends Component {
           )}
           { /* Tags/:tagName */ }
           {articles && authors && tags && (
-            <Route path="/tags/:tagName" render={({ match }) => {
+            <Route path={`/${year}/Q${quarter}/:tagName`} render={({ match }) => {
               return (
                 <FilterByTag
                   authors={authors}
@@ -413,6 +418,8 @@ class App extends Component {
                       })
                     })
                   }
+                  quarter={quarter}
+                  year={year}
                 />
               )
             }} />
@@ -453,6 +460,7 @@ class App extends Component {
                 match={match}
                 quarter={quarter}
                 tagsByQuarter={tagsByQuarter}
+                year={year}
               />
             }} />
           )}

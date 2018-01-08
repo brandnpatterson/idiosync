@@ -1,17 +1,19 @@
 import React from 'react'
-import { array, object } from 'prop-types'
+import { array, object, string } from 'prop-types'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 const propTypes = {
   authors: array.isRequired,
   filterByTag: array.isRequired,
-  match: object.isRequired
+  match: object.isRequired,
+  quarter: string,
+  year: string.isRequired
 }
 
-const FilterByTag = ({ authors, filterByTag, match }) => {
+const FilterByTag = ({ authors, filterByTag, match, quarter, year }) => {
   const filteredArticles = []
-  
+    
   filterByTag.map(itemToFilter => {
     return itemToFilter.filter(f => {
       if (f !== null) {
@@ -38,7 +40,7 @@ const FilterByTag = ({ authors, filterByTag, match }) => {
                   })}
                 </li>
                 <li className="title">
-                  <Link to={`/articles/${article.id_react}`}>{article.title}</Link>
+                  <Link to={`/${year}/Q${quarter}/${article.id_react}`}>{article.title}</Link>
                 </li>
               </ul>
             ))

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { array, bool } from 'prop-types'
+import { array, bool, string } from 'prop-types'
 import styled from 'styled-components'
 
 const propTypes = {
@@ -8,6 +8,8 @@ const propTypes = {
   authors: array.isRequired,
   flash_delete: bool.isRequired,
   flash_update: bool.isRequired,
+  quarter: string,
+  year: string.isRequired,
   tagsByQuarter: array.isRequired
 }
 
@@ -22,7 +24,7 @@ class Archive extends Component {
   }
   
   render() {
-    const { articlesByQuarter, authors, tagsByQuarter, flash_delete, flash_update, quarter } = this.props
+    const { articlesByQuarter, authors, tagsByQuarter, flash_delete, flash_update, quarter, year } = this.props
     
     return (
       <ArchiveWrapper>
@@ -56,7 +58,7 @@ class Archive extends Component {
                               })}
                             </li>
                             <li className="title">
-                              <Link to={`/articles/${article.id_react}`}>{article.title}</Link>
+                              <Link to={`/${year}/Q${quarter}/${article.id_react}`}>{article.title}</Link>
                             </li>
                           </ul>
                         </div>

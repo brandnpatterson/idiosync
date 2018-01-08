@@ -8,7 +8,7 @@ const propTypes = {
   tags: array.isRequired
 }
 
-const Tags = ({ articles, tags }) => {
+const Tags = ({ articles, tags, quarter, year }) => {
   return (
     <TagsDiv>
       <h2>Tags</h2>

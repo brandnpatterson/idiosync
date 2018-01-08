@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { array, bool } from 'prop-types'
+import { array, bool, string } from 'prop-types'
 import moment from 'moment'
 import styled from 'styled-components'
 
@@ -9,7 +9,9 @@ const propTypes = {
   authors: array.isRequired,
   flash_delete: bool.isRequired,
   flash_update: bool.isRequired,
-  tagsByQuarter: array.isRequired
+  quarter: string,
+  tagsByQuarter: array.isRequired,
+  year: string.isRequired
 }
 
 class Articles extends Component {
@@ -23,7 +25,7 @@ class Articles extends Component {
   }
 
   render () {
-    const { articlesByQuarter, authors, tagsByQuarter, flash_delete, flash_update, quarter } = this.props
+    const { articlesByQuarter, authors, tagsByQuarter, flash_delete, flash_update, quarter, year } = this.props
     
     return (
       <ArticlesWrapper>
@@ -57,7 +59,7 @@ class Articles extends Component {
                             })}
                           </li>
                           <li className="title">
-                            <Link to={`/articles/${article.id_react}`}>{article.title}</Link>
+                            <Link to={`/${year}/Q${quarter}/${article.id_react}`}>{article.title}</Link>
                           </li>
                         </ul>
                       </div>

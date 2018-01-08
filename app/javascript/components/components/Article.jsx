@@ -1,5 +1,5 @@
 import React from 'react'
-import { array, object } from 'prop-types'
+import { array, object, string } from 'prop-types'
 import { Link } from 'react-router-dom'
 import MdEdit from 'react-icons/lib/md/edit'
 import styled from 'styled-components'
@@ -7,12 +7,24 @@ import styled from 'styled-components'
 const propTypes = {
   article: object,
   articlesByQuarter: array.isRequired,
-  authors: array.isRequired
+  authors: array.isRequired,
+  quarter: string,
+  year: string.isRequired
 }
 
-const Article = ({ article, articlesByQuarter, authors }) => {
+const Article = ({ article, articlesByQuarter, authors, quarter, year }) => {
   const total = articlesByQuarter.length
   const tags = article.tags
+
+  const filtered = authors.map(author => {
+    return articlesByQuarter.filter(article => {
+      if (article.author_id === author.id) {
+        return article
+      }
+    })
+  })
+  
+  console.log(filtered)
 
   return (
     <ArticleWrapper>
@@ -20,7 +32,7 @@ const Article = ({ article, articlesByQuarter, authors }) => {
         <div>
           <div className="title-wrapper">
             <h2>{article.title}</h2>
-            <Link to={`${article.id_react}/edit`}>
+            <Link to={`/${year}/Q${quarter}/${article.id_react}/edit`}>
               <MdEdit />
             </Link>
           </div>
@@ -37,15 +49,15 @@ const Article = ({ article, articlesByQuarter, authors }) => {
         <div>
           <Link to={
             article.id_react === 1
-            ? `/articles/${total}`
-            : `/articles/${article.id_react - 1}`}
+            ? `/${year}/Q${quarter}/${total}`
+            : `/${year}/Q${quarter}/${article.id_react - 1}`}
           >
             <button>Prev</button>
           </Link>
           <Link to={
             article.id_react === total
-            ? `/articles/1`
-            : `/articles/${article.id_react + 1}`}
+            ? `/${year}/Q${quarter}/1`
+            : `/${year}/Q${quarter}/${article.id_react + 1}`}
           >
             <button>Next</button>
           </Link>
@@ -55,7 +67,7 @@ const Article = ({ article, articlesByQuarter, authors }) => {
       <ul>
         {
           tags.map((tag, index) => {
-            return <Link className="tags" key={index} to={`/tags/${tag.name}`}><li>{tag.name}</li></Link>
+            return <Link className="tags" key={index} to={`/${year}/Q${quarter}/${tag.name}`}><li>{tag.name}</li></Link>
           })
         }
       </ul>

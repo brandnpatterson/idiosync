@@ -29,7 +29,8 @@ class App extends Component {
   constructor () {
     super()
     this.state = {
-      articles: null,
+      articles: [],
+      articlesPreQuarter: [],
       authenticated: true,
       authors: null,
       confirm_delete: false,
@@ -40,7 +41,8 @@ class App extends Component {
       password: '',
       quarter: null,
       search: '',
-      tags: []
+      tags: [],
+      tagsByQuarter: []
     }
   }
 
@@ -58,7 +60,7 @@ class App extends Component {
   }
 
   getRequest = () => {
-    const { quarter } = this.state
+    const { articles, quarter } = this.state
     
     axios.get(reqAuthors)
       .then(res => {
@@ -70,7 +72,26 @@ class App extends Component {
       .then(res => {
         const articlesPreQuarter = res.data
         const articlesByQuarter = []
+        const tagsPreQuarter = []
 
+        articlesPreQuarter.forEach((article, index) => {
+          article.id_react_preq = index + 1
+
+          article.tags.forEach((tag, index) => {
+            const el = tagsPreQuarter.filter((el) => {
+              return el.id === tag.id
+            })
+            if (el.length) {
+              el[0].IsChecked = tag.checked;
+            } else {
+              tagsPreQuarter.push(tag)
+              this.setState({
+                tags: tagsPreQuarter
+              })
+            }
+          })
+        })
+        
         articlesPreQuarter.filter((article, index) => {
           article.id_quarter = moment(article.created_at).format('Q')
         
@@ -92,22 +113,31 @@ class App extends Component {
             })
           }
         })
-        this.setState({ articles: articlesByQuarter })
-        this.setTags()
+        this.setState({ articlesByQuarter: articlesByQuarter })
+        this.setState({ articles: articlesPreQuarter })
+
+        this.setTagsByQuarter()
       })
       .catch(err => console.log(err))
   }
 
-  setTags = () => {
-    const { articles, tags } = this.state
+  setTagsByQuarter = () => {
+    const { articlesByQuarter, tags } = this.state
     const tagsArr = []
-    // access each articles.tags to be used in tags state
-    articles.forEach(article => {
+
+    articlesByQuarter.forEach(article => {
       article.tags.forEach((tag, index) => {
-        tagsArr.push(tag)
-        this.setState({
-          tags: tagsArr
+        const el = tagsArr.filter((el) => {
+          return el.id === tag.id
         })
+        if (el.length) {
+          el[0].IsChecked = tag.checked;
+        } else {
+          tagsArr.push(tag)
+          this.setState({
+            tagsByQuarter: tagsArr
+          })
+        }
       })
     })
   }
@@ -237,6 +267,7 @@ class App extends Component {
   render () {
     const {
       articles,
+      articlesByQuarter,
       authenticated,
       authors,
       confirm_delete,
@@ -245,7 +276,8 @@ class App extends Component {
       flash_update,
       quarter,
       search,
-      tags
+      tags,
+      tagsByQuarter
     } = this.state
 
     let filteredArticles = []
@@ -256,8 +288,6 @@ class App extends Component {
           .indexOf(search.toLowerCase()) !== -1
       })
     }
-
-    filteredArticles.length = 3
 
     return (
       <AppWrapper>
@@ -275,14 +305,14 @@ class App extends Component {
           {articles && authors && tags && (
             <Route exact path="/" render={() => {
               return <Articles
-                articles={articles}
+                articlesByQuarter={articlesByQuarter}
                 changeQuarter={this.changeQuarter}
                 authors={authors}
                 flash_delete={flash_delete}
                 flash_update={flash_update}
                 getRequest={this.getRequest}
                 quarter={quarter}
-                tags={tags}
+                tagsByQuarter={tagsByQuarter}
               />
             }} />
           )}
@@ -320,11 +350,12 @@ class App extends Component {
           )}
           { /* Articles/:id */ }
           {articles && authors && (
-            <Route path="/articles/:index" render={({ match }) => {
+            <Route path={`/articles/:index`} render={({ match }) => {
               return (
                 <Article
                   article={articles.find(a => a.id_react === parseInt(match.params.index, 10))}
                   articles={articles}
+                  articlesByQuarter={articlesByQuarter}
                   authors={authors}
                 />
               )
@@ -413,7 +444,7 @@ class App extends Component {
           {articles && authors && tags && (
             <Route exact path="/a/:archive" render={({ match }) => {
               return <Archive
-                articles={articles}
+                articlesByQuarter={articlesByQuarter}
                 authors={authors}
                 changeQuarter={this.changeQuarter}
                 flash_delete={flash_delete}
@@ -421,7 +452,7 @@ class App extends Component {
                 flash_update={flash_update}
                 match={match}
                 quarter={quarter}
-                tags={tags}
+                tagsByQuarter={tagsByQuarter}
               />
             }} />
           )}

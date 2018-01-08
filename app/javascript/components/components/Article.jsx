@@ -5,13 +5,13 @@ import MdEdit from 'react-icons/lib/md/edit'
 import styled from 'styled-components'
 
 const propTypes = {
-  article: object.isRequired,
-  articles: array.isRequired,
+  article: object,
+  articlesByQuarter: array.isRequired,
   authors: array.isRequired
 }
 
-const Article = ({ article, articles, authors }) => {
-  const total = articles.length
+const Article = ({ article, articlesByQuarter, authors }) => {
+  const total = articlesByQuarter.length
   const tags = article.tags
 
   return (

@@ -4,11 +4,11 @@ import { array, bool } from 'prop-types'
 import styled from 'styled-components'
 
 const propTypes = {
-  articles: array.isRequired,
+  articlesByQuarter: array,
   authors: array.isRequired,
   flash_delete: bool.isRequired,
   flash_update: bool.isRequired,
-  tags: array.isRequired
+  tagsByQuarter: array.isRequired
 }
 
 class Archive extends Component {
@@ -18,12 +18,12 @@ class Archive extends Component {
     changeQuarter('4')
     setTimeout(() => {
       getRequest()
-    }, 10)
+    }, 0)
   }
   
   render() {
-    const { articles, authors, tags, flash_delete, flash_update, quarter } = this.props
-
+    const { articlesByQuarter, authors, tagsByQuarter, flash_delete, flash_update, quarter } = this.props
+    
     return (
       <ArchiveWrapper>
         <div className="outer">
@@ -42,10 +42,10 @@ class Archive extends Component {
           <h2 className="title">Make Unicorns Great Again</h2>
           <div className="inner">
             <div>
-              {tags.map((tag, tagIndex) => (
+              {tagsByQuarter.map((tag, tagIndex) => (
                 <div key={tagIndex}>
                   <h2>{tag.name}</h2>
-                  {articles.map((article, articleIndex) => {
+                  {articlesByQuarter.map((article, articleIndex) => {
                     return article.tags.map(articleTag => {
                       return articleTag.id === tag.id
                         ? <div key={articleIndex}>

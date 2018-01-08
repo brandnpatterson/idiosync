@@ -59,7 +59,6 @@ class EditArticle extends Component {
     })
 
     this.props.getRequest()
-    this.props.updateFlashConfirmation()
   }
 
   editArticle = (e) => {
@@ -75,11 +74,12 @@ class EditArticle extends Component {
     axios.put(`${req}/${id}`, articleObj)
       .then(() => {
         this.setStateAndProps()
-      })
-      .then(() => {
-        window.location.reload()
+        this.props.updateFlashConfirmation()
       })
       .catch(err => console.log(err))
+    setTimeout(() => {
+      this.props.updateFlashConfirmation()
+    }, 2000)
   }
 
   deleteArticle = (e) => {

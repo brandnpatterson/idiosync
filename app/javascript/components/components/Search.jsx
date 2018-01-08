@@ -11,6 +11,7 @@ const propTypes = {
 }
 
 const Search = ({ filteredArticles, search, updateSearch }) => {
+  
   return (
     <SearchInput autoComplete="off">
       <input

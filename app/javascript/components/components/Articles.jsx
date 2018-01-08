@@ -16,7 +16,7 @@ class Articles extends Component {
   componentWillMount () {
     const { changeQuarter, getRequest, quarter } = this.props
 
-    changeQuarter(moment().format('Q'))
+    changeQuarter('1')
     setTimeout(() => {
       getRequest()
     }, 10)
@@ -24,7 +24,7 @@ class Articles extends Component {
 
   render () {
     const { articles, authors, tags, flash_delete, flash_update, quarter } = this.props
-
+    
     return (
       <ArticlesWrapper>
         <div className="outer">

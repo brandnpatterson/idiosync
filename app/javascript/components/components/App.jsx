@@ -38,7 +38,7 @@ class App extends Component {
       flash_update: false,
       email: '',
       password: '',
-      quarter: moment().format('Q'),
+      quarter: null,
       search: '',
       tags: []
     }
@@ -70,16 +70,26 @@ class App extends Component {
       .then(res => {
         const articlesPreQuarter = res.data
         const articlesByQuarter = []
-        articlesPreQuarter.filter((article, index) => {
-          article.id_react = index + 1
-          article.id_quarter = moment(article.created_at).format('Q')
 
-          if (article.created_at.startsWith('2017-12')) {
+        articlesPreQuarter.filter((article, index) => {
+          article.id_quarter = moment(article.created_at).format('Q')
+        
+          if (~article.created_at.indexOf('-01') || ~article.created_at.indexOf('-02') || ~article.created_at.indexOf('-03')) {
+            article.id_quarter = '1'
+          } else if (~article.created_at.indexOf('-04') || ~article.created_at.indexOf('-05') || ~article.created_at.indexOf('-06')) {
+            article.id_quarter = '2'
+          } else if (~article.created_at.indexOf('-07') || ~article.created_at.indexOf('-08') || ~article.created_at.indexOf('-09')) {
             article.id_quarter = '3'
+          } else if (~article.created_at.indexOf('-10') || ~article.created_at.indexOf('-11') || ~article.created_at.indexOf('-12')) {
+            article.id_quarter = '4'
           }
-          
+
           if (article.id_quarter === quarter) {
             articlesByQuarter.push(article)
+            
+            articlesByQuarter.forEach((article, quarterIndex) => {
+              article.id_react = quarterIndex + 1
+            })
           }
         })
         this.setState({ articles: articlesByQuarter })
@@ -90,28 +100,16 @@ class App extends Component {
 
   setTags = () => {
     const { articles, tags } = this.state
+    const tagsArr = []
     // access each articles.tags to be used in tags state
-    setTimeout(() => {
-      articles.forEach(article => {
-        article.tags.forEach(tag => {
-          // article.tag => tags
-          tags.push(tag)
-          // reduce any duplicates
-          const reducedTags = tags.reduce((first, second) => {
-            // if the next object's id is not found in the output array
-            if (!first.some((el) => {
-              return el.id === second.id
-            }))
-              // push the object into the output array
-              first.push(second)
-            return first
-          }, [])
-          this.setState({
-            tags: reducedTags
-          })
+    articles.forEach(article => {
+      article.tags.forEach((tag, index) => {
+        tagsArr.push(tag)
+        this.setState({
+          tags: tagsArr
         })
       })
-    }, 30)
+    })
   }
 
   // authentication
@@ -260,7 +258,7 @@ class App extends Component {
     }
 
     filteredArticles.length = 3
-    
+
     return (
       <AppWrapper>
         <div onClick={this.resetSearch}>

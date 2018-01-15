@@ -8,7 +8,7 @@ const propTypes = {
   article: object,
   articlesByQuarter: array.isRequired,
   authors: array.isRequired,
-  quarter: string,
+  quarter: string.isRequired,
   year: string.isRequired
 }
 

@@ -8,7 +8,7 @@ const propTypes = {
   authors: array.isRequired,
   flash_delete: bool.isRequired,
   flash_update: bool.isRequired,
-  // quarter: string,
+  quarter: string.isRequired,
   year: string.isRequired,
   tagsByQuarter: array.isRequired
 }

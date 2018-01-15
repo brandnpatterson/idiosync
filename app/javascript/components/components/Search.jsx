@@ -6,12 +6,18 @@ import styled from 'styled-components'
 
 const propTypes = {
   filteredArticles: array.isRequired,
+  quarter: string,
   search: string.isRequired,
-  updateSearch: func.isRequired
+  updateSearch: func.isRequired,
+  year: string.isRequired
 }
 
-const Search = ({ filteredArticles, search, updateSearch }) => {
-  
+const Search = ({ filteredArticles, quarter, search, updateSearch, year }) => {
+
+  filteredArticles.map((a, index) => {
+    console.log(a)
+  })
+
   return (
     <SearchInput autoComplete="off">
       <input
@@ -26,7 +32,7 @@ const Search = ({ filteredArticles, search, updateSearch }) => {
           <Link
             className={"search__result--item" + (search === '' ? " hidden" : '')}
             key={index}
-            to={`/articles/${article.id_react}`}
+            to={`/${year}/Q${quarter}/${article.id_react}`}
           >
             <li>{article.title}</li>
           </Link>

@@ -66,6 +66,7 @@ class App extends Component {
     axios.get(reqAuthors)
       .then(res => {
         const authors = res.data
+        authors.forEach((a, index) => a.id_react = index + 1)
         this.setState({ authors })
       })
       .catch(err => console.log(err))
@@ -94,16 +95,14 @@ class App extends Component {
         })
         
         articlesPreQuarter.filter((article, index) => {
-          article.id_quarter = moment(article.created_at).format('Q')
-        
           if (~article.created_at.indexOf('-01') || ~article.created_at.indexOf('-02') || ~article.created_at.indexOf('-03')) {
-            article.id_quarter = '1'
+            article.id_quarter = `${moment(article.created_at).format('YYYY')}-1`
           } else if (~article.created_at.indexOf('-04') || ~article.created_at.indexOf('-05') || ~article.created_at.indexOf('-06')) {
-            article.id_quarter = '2'
+            article.id_quarter = `${moment(article.created_at).format('YYYY')}-2`
           } else if (~article.created_at.indexOf('-07') || ~article.created_at.indexOf('-08') || ~article.created_at.indexOf('-09')) {
-            article.id_quarter = '3'
+            article.id_quarter = `${moment(article.created_at).format('YYYY')}-3`
           } else if (~article.created_at.indexOf('-10') || ~article.created_at.indexOf('-11') || ~article.created_at.indexOf('-12')) {
-            article.id_quarter = '4'
+            article.id_quarter = `${moment(article.created_at).format('YYYY')}-4`
           }
 
           if (article.id_quarter === quarter) {
@@ -259,7 +258,6 @@ class App extends Component {
 
   changeQuarter = (setQuarter) => {
     const { authors, quarter } = this.state
-    
     this.setState({
       quarter: setQuarter
     })
@@ -298,8 +296,10 @@ class App extends Component {
             authenticated={authenticated}
             filteredArticles={filteredArticles}
             logout={this.logout}
+            quarter={quarter}
             search={search}
             updateSearch={this.updateSearch}
+            year={year}
           />
         </div>
         <Switch>

@@ -48,7 +48,6 @@ class EditAuthor extends Component {
     this.setState({
       fireRedirect: true
     })
-    this.props.updateFlashConfirmation()
     this.props.getRequest()
   }
 
@@ -67,6 +66,7 @@ class EditAuthor extends Component {
     }
     axios.put(`${req}/${id}`, authorObj)
       .then(() => {
+        this.props.updateFlashConfirmation()
         this.setStateAndProps()
       })
       .catch(err => console.log(err))

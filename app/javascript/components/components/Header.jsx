@@ -8,11 +8,13 @@ const propTypes = {
   authenticated: bool.isRequired,
   filteredArticles: array.isRequired,
   logout: func.isRequired,
+  quarter: string,
   search: string.isRequired,
-  updateSearch: func.isRequired
+  updateSearch: func.isRequired,
+  year: string.isRequired
 }
 
-const Header = ({ authenticated, filteredArticles, logout, search, updateSearch }) => {
+const Header = ({ authenticated, filteredArticles, logout, quarter, search, updateSearch, year }) => {
   return (
     <Nav>
       <ul className="left">
@@ -23,8 +25,10 @@ const Header = ({ authenticated, filteredArticles, logout, search, updateSearch 
         <li>
           <Search
             filteredArticles={filteredArticles}
+            quarter={quarter}
             search={search}
             updateSearch={updateSearch}
+            year={year}
           />
         </li>
       </ul>

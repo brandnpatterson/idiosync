@@ -8,16 +8,15 @@ const propTypes = {
   authors: array.isRequired,
   flash_delete: bool.isRequired,
   flash_update: bool.isRequired,
-  quarter: string,
+  // quarter: string,
   year: string.isRequired,
   tagsByQuarter: array.isRequired
 }
 
 class Archive extends Component {
   componentWillMount () {
-    const { changeQuarter, getRequest } = this.props
-    
-    changeQuarter('4')
+    const { changeQuarter, getRequest, match } = this.props
+    changeQuarter(match.params.archive.replace('Q', ''))
     setTimeout(() => {
       getRequest()
     }, 0)
@@ -25,7 +24,7 @@ class Archive extends Component {
   
   render() {
     const { articlesByQuarter, authors, tagsByQuarter, flash_delete, flash_update, quarter, year } = this.props
-    
+
     return (
       <ArchiveWrapper>
         <div className="outer">

@@ -48,8 +48,6 @@ class App extends Component {
   }
 
   componentWillMount () {
-    const { articles, authors } = this.state
-
     let localAuth = localStorage.getItem('authenticated')
     if (localAuth === 'true') {
       this.setState({
@@ -450,8 +448,8 @@ class App extends Component {
             }} />
           )}
           { /* Tags/:tagName */ }
-          {quarter && articles && authors && tags && (
-            <Route path={`tags/:tagName`} render={({ match }) => {
+          {articles && authors && tags && (
+            <Route path={`/tag/:tagName`} render={({ match }) => {
               return (
                 <FilterByTag
                   authors={authors}

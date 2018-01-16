@@ -1,13 +1,9 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router'
 
-class NotFound extends Component {
-  render () {
-    const { from } = this.props || '/'
-    return (
-      <Redirect to={from || '/'} />
-    )
-  }
-}
+const NotFound = () => (
+  <div>
+    <h2>404 Not Found</h2>
+  </div>
+)
 
 export default NotFound

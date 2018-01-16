@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { array, bool, func } from 'prop-types'
 import { Link } from 'react-router-dom'
 import MdEdit from 'react-icons/lib/md/edit'
+import ReactQuill from 'react-quill'
 import axios from 'axios'
 import styled from 'styled-components'
 
@@ -27,10 +28,10 @@ class NewArticle extends Component {
     this.state = {
       author_id: '',
       content: '',
+      flash_author_required: false,
       new_article: false,
       tag_list: '',
-      title: '',
-      flash_author_required: false
+      title: ''
     }
   }
 
@@ -38,6 +39,14 @@ class NewArticle extends Component {
     this.setState({
       [e.target.name]: e.target.value
     })
+    console.log(this.state)
+  }
+
+  onRichChange = (value) => {
+    this.setState({ 
+      content: value 
+    })
+    console.log(this.state)
   }
 
   postArticle = (e) => {
@@ -214,7 +223,7 @@ class NewArticle extends Component {
             </div>
             <div className="formgroup">
               <label htmlFor="content"> Content:
-                <textarea name="content" value={content} onChange={this.onChange} required />
+                <ReactQuill name="content" value={content} onChange={this.onRichChange} required />
               </label>
             </div>
             <div className="formgroup">

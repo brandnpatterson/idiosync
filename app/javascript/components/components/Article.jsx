@@ -57,7 +57,7 @@ const Article = ({ article, articlesByQuarter, authors, getRequest, match, quart
               </Link>
             </div>
           </header>
-          <p>{article.content}</p>
+          <p dangerouslySetInnerHTML={{__html: article.content}}></p>
           <ul>
             {tags &&
               tags.map((tag) => {

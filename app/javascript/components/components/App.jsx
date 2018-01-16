@@ -49,9 +49,6 @@ class App extends Component {
 
   componentWillMount () {
     const { articles, authors } = this.state
-    
-    this.setQuarter()
-    this.getRequest()
 
     let localAuth = localStorage.getItem('authenticated')
     if (localAuth === 'true') {
@@ -59,6 +56,14 @@ class App extends Component {
         authenticated: true
       })
     }
+  }
+
+  componentDidMount () {
+    this.setState({
+      quarter: window.location.href.substr(22, 6)
+    }, () => {
+      this.getRequest()
+    })
   }
 
   getRequest = () => {
@@ -272,13 +277,10 @@ class App extends Component {
     }
   }
 
-  changeQuarter = (setQuarter, component) => {
-    setTimeout(() => {
-      this.setState({
-        quarter: setQuarter
-      })
-      this.getRequest()
-    })
+  changeQuarter = (setQuarter) => {
+    this.setState({
+      quarter: setQuarter
+    }, () => this.getRequest())
   }
 
   render () {
@@ -449,7 +451,7 @@ class App extends Component {
           )}
           { /* Tags/:tagName */ }
           {quarter && articles && authors && tags && (
-            <Route path={`/:tagName`} render={({ match }) => {
+            <Route path={`tags/:tagName`} render={({ match }) => {
               return (
                 <FilterByTag
                   authors={authors}

@@ -12,67 +12,72 @@ const propTypes = {
 }
 
 const Article = ({ article, articlesByQuarter, authors, getRequest, match, quarter }) => {
-  console.log(match)
-
   const total = articlesByQuarter.length
-  const tags = article.tags
+  let tags
+  if (article) {
+    tags = article.tags
+  }
   
   return (
     <ArticleWrapper>
-      <header>
+      {article &&
         <div>
-          <div className="title-wrapper">
-            <h2>{article.title}</h2>
-            <Link to={`/${quarter}/${article.id_react}/edit`}>
-              <MdEdit />
-            </Link>
-          </div>
-          {authors &&
-            authors.map((author, index) => {
-              if (author.id === article.author_id) {
-                return <h3 key={index}>{author.name}</h3>
-              } else {
-                return null
+          <header>
+            <div>
+              <div className="title-wrapper">
+                <h2>{article.title}</h2>
+                <Link to={`/${quarter}/${article.id_react}/edit`}>
+                  <MdEdit />
+                </Link>
+              </div>
+              {authors &&
+                authors.map((author, index) => {
+                  if (author.id === article.author_id) {
+                    return <h3 key={index}>{author.name}</h3>
+                  } else {
+                    return null
+                  }
+                })
               }
-            })
-          }
-        </div>
-        <div>
-          <Link to={
-            article.id_react === 1
-            ? `/${quarter}/${total}`
-            : `/${quarter}/${article.id_react - 1}`}
-          >
-            <button>Prev</button>
-          </Link>
-          <Link to={
-            article.id_react === total
-            ? `/${quarter}/1`
-            : `/${quarter}/${article.id_react + 1}`}
-          >
-            <button>Next</button>
-          </Link>
-        </div>
-      </header>
-      <p>{article.content}</p>
-      <ul>
-        {tags &&
-          tags.map((tag, index) => {
-            return <Link className="tags" key={index} to={`/${tag.name}`}><li>{tag.name}</li></Link>
-          })
-        }
-      </ul>
-      <ul>
-        {authors &&
-          authors.map((author, index) => {
-            if (author.id === article.author_id) {
-              return <h2 key={index}>{author.bio}</h2>
-            } else {
-              return null
+            </div>
+            <div>
+              <Link to={
+                article.id_react === 1
+                  ? `/${quarter}/${total}`
+                  : `/${quarter}/${article.id_react - 1}`}
+              >
+                <button>Prev</button>
+              </Link>
+              <Link to={
+                article.id_react === total
+                  ? `/${quarter}/1`
+                  : `/${quarter}/${article.id_react + 1}`}
+              >
+                <button>Next</button>
+              </Link>
+            </div>
+          </header>
+          <p>{article.content}</p>
+          <ul>
+            {tags &&
+              tags.map((tag, index) => {
+                return <Link className="tags" key={index} to={`/tag/${tag.name}`}><li>{tag.name}</li></Link>
+              })
             }
-          })
-        }
-      </ul>
+          </ul>
+          <ul>
+            {authors &&
+              authors.map((author, index) => {
+                if (author.id === article.author_id) {
+                  return <h2 key={index}>{author.bio}</h2>
+                } else {
+                  return null
+                }
+              })
+            }
+          </ul>
+        </div>
+      }
     </ArticleWrapper>
   )
 }

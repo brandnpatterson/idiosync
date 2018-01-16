@@ -1,19 +1,19 @@
 import React from 'react'
-import { array, object, string } from 'prop-types'
+import { array, func, object, string } from 'prop-types'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 const propTypes = {
   authors: array.isRequired,
+  changeQuarter: func.isRequired,
   filterByTag: array.isRequired,
   match: object.isRequired,
-  quarter: string,
-  year: string.isRequired
+  quarter: string
 }
 
-const FilterByTag = ({ authors, filterByTag, match, quarter, year }) => {
+const FilterByTag = ({ authors, changeQuarter, filterByTag, match, quarter }) => {
   const filteredArticles = []
-    
+
   filterByTag.map(itemToFilter => {
     return itemToFilter.filter(f => {
       if (f !== null) {
@@ -23,6 +23,14 @@ const FilterByTag = ({ authors, filterByTag, match, quarter, year }) => {
       }
     })
   })
+
+  const testForMatch = e => {
+    filteredArticles.map(article => {
+      if (e.target.innerHTML === article.title) {
+        changeQuarter(article.id_quarter)
+      }
+    })
+  }
 
   return (
     <FilterByTagWrapper>
@@ -35,12 +43,12 @@ const FilterByTag = ({ authors, filterByTag, match, quarter, year }) => {
             filteredArticles.map((article, index) => (
               <ul key={index}>
                 <li className="author">
-                  { authors.map(author => {
+                  {authors.map(author => {
                     return author.id === article.author_id ? author.name : ''
                   })}
                 </li>
                 <li className="title">
-                  <Link to={`/${year}/Q${quarter}/${article.id_react}`}>{article.title}</Link>
+                  <Link onClick={testForMatch} to={`/${article.id_quarter}/${article.id_react}`}>{article.title}</Link>
                 </li>
               </ul>
             ))

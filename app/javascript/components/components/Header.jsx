@@ -2,19 +2,28 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { array, bool, func, string } from 'prop-types'
 import styled from 'styled-components'
-import Search from './Search'
+import MdSearch from 'react-icons/lib/md/search'
 
 const propTypes = {
   authenticated: bool.isRequired,
+  changeQuarter: func.isRequired,
   filteredArticles: array.isRequired,
+  getRequest: func.isRequired,
   logout: func.isRequired,
   quarter: string,
   search: string.isRequired,
-  updateSearch: func.isRequired,
-  year: string.isRequired
+  updateSearch: func.isRequired
 }
 
-const Header = ({ authenticated, filteredArticles, logout, quarter, search, updateSearch, year }) => {
+const Header = ({ authenticated, changeQuarter, filteredArticles, logout, quarter, search, updateSearch }) => {
+  const testForMatch = e => {
+    filteredArticles.map(article => {
+      if (e.target.innerHTML === article.title) {
+        changeQuarter(article.id_quarter)
+      }
+    })
+  }
+
   return (
     <Nav>
       <ul className="left">
@@ -23,13 +32,28 @@ const Header = ({ authenticated, filteredArticles, logout, quarter, search, upda
       </ul>
       <ul className="right">
         <li>
-          <Search
-            filteredArticles={filteredArticles}
-            quarter={quarter}
-            search={search}
-            updateSearch={updateSearch}
-            year={year}
-          />
+          <SearchInput autoComplete="off">
+            <input
+              className="search__input"
+              type="text"
+              onChange={updateSearch}
+              placeholder="Search"
+              value={search}
+            />
+            <ul className="search__result">
+              {filteredArticles.map((article, index) => (
+                <Link
+                  className={"search__result--item" + (search === '' ? " hidden" : '')}
+                  key={index}
+                  onClick={testForMatch}
+                  to={`/${article.id_quarter}/${article.id_react}`}
+                >
+                  <li>{article.title}</li>
+                </Link>
+              ))}
+            </ul>
+            <MdSearch className="search__icon" />
+          </SearchInput>
         </li>
       </ul>
       {
@@ -75,6 +99,50 @@ const Nav = styled.nav `
     a {
       color: black;
       font-size: 1em;
+    }
+  }
+`
+
+const SearchInput = styled.div`
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  @media (max-width: 700px) {
+    margin-left: 3.2em;
+  }
+  .hidden {
+    display: none;
+  }
+  .search {
+    &__input {
+      color: gray;
+      font-size: 14px;
+      height: 28px;
+      margin-right: 0.5em;
+      border: 1px solid #eee;
+    }
+    &__result {
+      position: absolute;
+      top: 3em;
+      left: -2em;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      z-index: 10;
+      &--item {
+        background: white !important;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1), 0 5px 10px rgba(0, 0, 0, 0.05);
+        padding: 0.5em;
+        width: 90%;
+      }
+      &--active {
+        background: #f1f1f1;
+      }
+    }
+    &__icon {
+      color: gray;
+      font-size: 22px;
     }
   }
 `

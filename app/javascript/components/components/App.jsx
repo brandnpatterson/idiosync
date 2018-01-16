@@ -30,7 +30,7 @@ class App extends Component {
     super()
     this.state = {
       articles: [],
-      articlesPreQuarter: [],
+      articlesByQuarter: [],
       authenticated: true,
       authors: null,
       confirm_delete: false,
@@ -50,6 +50,7 @@ class App extends Component {
   componentWillMount () {
     const { articles, authors } = this.state
     
+    this.setQuarter()
     this.getRequest()
 
     let localAuth = localStorage.getItem('authenticated')
@@ -66,19 +67,18 @@ class App extends Component {
     axios.get(reqAuthors)
       .then(res => {
         const authors = res.data
-        authors.forEach((a, index) => a.id_react = index + 1)
+        authors.forEach((a, index) => a.id_author = index + 1)
         this.setState({ authors })
       })
       .catch(err => console.log(err))
     axios.get(reqArticles)
       .then(res => {
+        const articlesNotInQuarter = []
         const articlesPreQuarter = res.data
         const articlesByQuarter = []
         const tagsPreQuarter = []
-
+        
         articlesPreQuarter.forEach((article, index) => {
-          article.id_react_preq = index + 1
-
           article.tags.forEach((tag, index) => {
             const el = tagsPreQuarter.filter((el) => {
               return el.id === tag.id
@@ -93,7 +93,7 @@ class App extends Component {
             }
           })
         })
-        
+
         articlesPreQuarter.filter((article, index) => {
           if (~article.created_at.indexOf('-01') || ~article.created_at.indexOf('-02') || ~article.created_at.indexOf('-03')) {
             article.id_quarter = `${moment(article.created_at).format('YYYY')}-1`
@@ -104,18 +104,21 @@ class App extends Component {
           } else if (~article.created_at.indexOf('-10') || ~article.created_at.indexOf('-11') || ~article.created_at.indexOf('-12')) {
             article.id_quarter = `${moment(article.created_at).format('YYYY')}-4`
           }
-
+          
           if (article.id_quarter === quarter) {
             articlesByQuarter.push(article)
-            
             articlesByQuarter.forEach((article, quarterIndex) => {
+              article.id_react = quarterIndex + 1
+            })
+          } else if (article.id_quarter !== quarter) {
+            articlesNotInQuarter.push(article)
+            articlesNotInQuarter.forEach((article, quarterIndex) => {
               article.id_react = quarterIndex + 1
             })
           }
         })
         this.setState({ articlesByQuarter: articlesByQuarter })
         this.setState({ articles: articlesPreQuarter })
-
         this.setTagsByQuarter()
       })
       .catch(err => console.log(err))
@@ -140,6 +143,19 @@ class App extends Component {
         }
       })
     })
+  }
+
+  setQuarter = () => {
+    const { year } = this.state
+    if (moment().format('M') === '1' || moment().format('M') === '2' || moment().format('M') === '3') {
+      this.changeQuarter(`${year}-1`)
+    } else if (moment().format('M') === '4' || moment().format('M') === '5' || moment().format('M') === '6') {
+      this.changeQuarter(`${year}-2`)
+    } else if (moment().format('M') === '7' || moment().format('M') === '8' || moment().format('M') === '9') {
+      this.changeQuarter(`${year}-3`)
+    } else if (moment().format('M') === '10' || moment().format('M') === '11' || moment().format('M') === '12') {
+      this.changeQuarter(`${year}-4`)
+    }
   }
 
   // authentication
@@ -256,10 +272,12 @@ class App extends Component {
     }
   }
 
-  changeQuarter = (setQuarter) => {
-    const { authors, quarter } = this.state
-    this.setState({
-      quarter: setQuarter
+  changeQuarter = (setQuarter, component) => {
+    setTimeout(() => {
+      this.setState({
+        quarter: setQuarter
+      })
+      this.getRequest()
     })
   }
 
@@ -276,30 +294,31 @@ class App extends Component {
       quarter,
       search,
       tags,
-      tagsByQuarter,
-      year
+      tagsByQuarter
     } = this.state
 
     let filteredArticles = []
-
+    
     if (search !== '') {
       filteredArticles = articles.filter(article => {
         return article.title.toLowerCase()
           .indexOf(search.toLowerCase()) !== -1
       })
     }
-
+    
     return (
       <AppWrapper>
         <div onClick={this.resetSearch}>
           <Header
+            articles={articles}
             authenticated={authenticated}
+            changeQuarter={this.changeQuarter}
             filteredArticles={filteredArticles}
+            getRequest={this.getRequest}
             logout={this.logout}
             quarter={quarter}
             search={search}
             updateSearch={this.updateSearch}
-            year={year}
           />
         </div>
         <Switch>
@@ -314,8 +333,8 @@ class App extends Component {
                 flash_update={flash_update}
                 getRequest={this.getRequest}
                 quarter={quarter}
+                setQuarter={this.setQuarter}
                 tagsByQuarter={tagsByQuarter}
-                year={year}
               />
             }} />
           )}
@@ -336,10 +355,10 @@ class App extends Component {
           )}
           { /* Edit Article by :id */ }
           {articles && (
-            <Route path={`/${year}/Q${quarter}/:id/edit`} render={({ match }) => {
+            <Route path={`/${quarter}/:id/edit`} render={({ match }) => {
               return (
                 <EditArticle
-                  article={articles.find(a => a.id_react === parseInt(match.params.id, 10))}
+                  article={articlesByQuarter.find(a => a.id_react === parseInt(match.params.id, 10))}
                   articles={articles}
                   deleteFlashConfirmation={this.deleteFlashConfirmation}
                   updateFlashConfirmation={this.updateFlashConfirmation}
@@ -351,17 +370,17 @@ class App extends Component {
               )
             }} />
           )}
-          { /* Articles/:id */ }
-          {articles && authors && (
-            <Route path={`/${year}/Q${quarter}/:index`} render={({ match }) => {
+          { /* Article/:id */ }
+          {quarter && articlesByQuarter && authors && tags && (
+            <Route path={`/${quarter}/:id`} render={({ match }) => {
               return (
                 <Article
-                  article={articles.find(a => a.id_react === parseInt(match.params.index, 10))}
-                  articles={articles}
+                  article={articlesByQuarter.find(a => a.id_react === parseInt(match.params.id, 10))}
                   articlesByQuarter={articlesByQuarter}
                   authors={authors}
+                  changeQuarter={this.changeQuarter}
+                  getRequest={this.getRequest}
                   quarter={quarter}
-                  year={year}
                 />
               )
             }} />
@@ -383,7 +402,7 @@ class App extends Component {
             <Route path="/authors/:id/edit" render={({ match }) => {
               return (
                 <EditAuthor
-                  author={authors.find(a => a.id_react === parseInt(match.params.id, 10))}
+                  author={authors.find(a => a.id_author === parseInt(match.params.id, 10))}
                   deleteFlashConfirmation={this.deleteFlashConfirmation}
                   updateFlashConfirmation={this.updateFlashConfirmation}
                   getRequest={this.getRequest}
@@ -399,12 +418,42 @@ class App extends Component {
               return <Tags articles={articles} tags={tags} />
             }} />
           )}
-          { /* Tags/:tagName */ }
+          { /* ArchiveList */}
+          <Route exact path="/submissions" component={Submissions} />
           {articles && authors && tags && (
-            <Route path={`/${year}/Q${quarter}/:tagName`} render={({ match }) => {
+            <Route exact path="/a" render={() => {
+              return <ArchiveList
+                articles={articles}
+                authors={authors}
+                flash_delete={flash_delete}
+                flash_update={flash_update}
+                tags={tags}
+              />
+            }} />
+          )}
+          { /* ArchiveList/:archive */}
+          {articles && authors && tags && (
+            <Route exact path="/a/:archive" render={({ match }) => {
+              return <Archive
+                articlesByQuarter={articlesByQuarter}
+                authors={authors}
+                changeQuarter={this.changeQuarter}
+                flash_delete={flash_delete}
+                getRequest={this.getRequest}
+                flash_update={flash_update}
+                match={match}
+                quarter={quarter}
+                tagsByQuarter={tagsByQuarter}
+              />
+            }} />
+          )}
+          { /* Tags/:tagName */ }
+          {quarter && articles && authors && tags && (
+            <Route path={`/:tagName`} render={({ match }) => {
               return (
                 <FilterByTag
                   authors={authors}
+                  changeQuarter={this.changeQuarter}
                   match={match}
                   tags={tags}
                   filterByTag={
@@ -419,7 +468,6 @@ class App extends Component {
                     })
                   }
                   quarter={quarter}
-                  year={year}
                 />
               )
             }} />
@@ -434,37 +482,7 @@ class App extends Component {
               updatePassword={this.updatePassword}
             />
           }} />
-          { /* ArchiveList */ }
-          <Route exact path="/submissions" component={Submissions} />
-          {articles && authors && tags && (
-            <Route exact path="/a" render={() => {
-              return <ArchiveList
-                articles={articles}
-                authors={authors}
-                flash_delete={flash_delete}
-                flash_update={flash_update}
-                tags={tags}
-              />
-            }} />
-          )}
-          { /* ArchiveList/:archive */ }
-          {articles && authors && tags && (
-            <Route exact path="/a/:archive" render={({ match }) => {
-              return <Archive
-                articlesByQuarter={articlesByQuarter}
-                authors={authors}
-                changeQuarter={this.changeQuarter}
-                flash_delete={flash_delete}
-                getRequest={this.getRequest}
-                flash_update={flash_update}
-                match={match}
-                quarter={quarter}
-                tagsByQuarter={tagsByQuarter}
-                year={year}
-              />
-            }} />
-          )}
-          {articles && authors && (
+          {quarter && articles && authors && tags && (
             <Route component={NotFound} />
           )}
         </Switch>

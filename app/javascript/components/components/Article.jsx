@@ -8,35 +8,26 @@ const propTypes = {
   article: object,
   articlesByQuarter: array.isRequired,
   authors: array.isRequired,
-  quarter: string.isRequired,
-  year: string.isRequired
+  quarter: string.isRequired
 }
 
-const Article = ({ article, articlesByQuarter, authors, quarter, year }) => {
+const Article = ({ article, articlesByQuarter, authors, getRequest, match, quarter }) => {
+  console.log(match)
+
   const total = articlesByQuarter.length
   const tags = article.tags
-
-  const filtered = authors.map(author => {
-    return articlesByQuarter.filter(article => {
-      if (article.author_id === author.id) {
-        return article
-      }
-    })
-  })
   
-  console.log(filtered)
-
   return (
     <ArticleWrapper>
       <header>
         <div>
           <div className="title-wrapper">
             <h2>{article.title}</h2>
-            <Link to={`/${year}/Q${quarter}/${article.id_react}/edit`}>
+            <Link to={`/${quarter}/${article.id_react}/edit`}>
               <MdEdit />
             </Link>
           </div>
-          {
+          {authors &&
             authors.map((author, index) => {
               if (author.id === article.author_id) {
                 return <h3 key={index}>{author.name}</h3>
@@ -49,15 +40,15 @@ const Article = ({ article, articlesByQuarter, authors, quarter, year }) => {
         <div>
           <Link to={
             article.id_react === 1
-            ? `/${year}/Q${quarter}/${total}`
-            : `/${year}/Q${quarter}/${article.id_react - 1}`}
+            ? `/${quarter}/${total}`
+            : `/${quarter}/${article.id_react - 1}`}
           >
             <button>Prev</button>
           </Link>
           <Link to={
             article.id_react === total
-            ? `/${year}/Q${quarter}/1`
-            : `/${year}/Q${quarter}/${article.id_react + 1}`}
+            ? `/${quarter}/1`
+            : `/${quarter}/${article.id_react + 1}`}
           >
             <button>Next</button>
           </Link>
@@ -65,14 +56,14 @@ const Article = ({ article, articlesByQuarter, authors, quarter, year }) => {
       </header>
       <p>{article.content}</p>
       <ul>
-        {
+        {tags &&
           tags.map((tag, index) => {
-            return <Link className="tags" key={index} to={`/${year}/Q${quarter}/${tag.name}`}><li>{tag.name}</li></Link>
+            return <Link className="tags" key={index} to={`/${tag.name}`}><li>{tag.name}</li></Link>
           })
         }
       </ul>
       <ul>
-        {
+        {authors &&
           authors.map((author, index) => {
             if (author.id === article.author_id) {
               return <h2 key={index}>{author.bio}</h2>

@@ -1,22 +1,26 @@
 import React from 'react'
+import { Redirect } from 'react-router'
 import { Link } from 'react-router-dom'
 import { array, func, string } from 'prop-types'
 import MdSearch from 'react-icons/lib/md/search'
 import styled from 'styled-components'
 
 const propTypes = {
+  changeQuarter: func.isRequired,
   filteredArticles: array.isRequired,
-  quarter: string,
+  quarter: string.isRequired,
   search: string.isRequired,
-  updateSearch: func.isRequired,
-  year: string.isRequired
+  updateSearch: func.isRequired
 }
 
-const Search = ({ filteredArticles, quarter, search, updateSearch, year }) => {
-
-  filteredArticles.map((a, index) => {
-    console.log(a)
-  })
+const Search = ({ changeQuarter, filteredArticles, quarter, search, updateSearch }) => {
+  const testForMatch = e => {
+    filteredArticles.map(article => {
+      if (e.target.innerHTML === article.title) {
+        changeQuarter(article.id_quarter)
+      }
+    })
+  }
 
   return (
     <SearchInput autoComplete="off">
@@ -32,7 +36,8 @@ const Search = ({ filteredArticles, quarter, search, updateSearch, year }) => {
           <Link
             className={"search__result--item" + (search === '' ? " hidden" : '')}
             key={index}
-            to={`/${year}/Q${quarter}/${article.id_react}`}
+            onClick={testForMatch}
+            to={`/${article.id_quarter}/${article.id_react}`}
           >
             <li>{article.title}</li>
           </Link>

@@ -9,7 +9,6 @@ const propTypes = {
   flash_delete: bool.isRequired,
   flash_update: bool.isRequired,
   quarter: string.isRequired,
-  year: string.isRequired,
   tagsByQuarter: array.isRequired
 }
 
@@ -17,13 +16,11 @@ class Archive extends Component {
   componentWillMount () {
     const { changeQuarter, getRequest, match } = this.props
     changeQuarter(match.params.archive.replace('Q', ''))
-    setTimeout(() => {
-      getRequest()
-    }, 0)
+    getRequest()
   }
   
   render() {
-    const { articlesByQuarter, authors, tagsByQuarter, flash_delete, flash_update, quarter, year } = this.props
+    const { articlesByQuarter, authors, tagsByQuarter, flash_delete, flash_update, quarter } = this.props
 
     return (
       <ArchiveWrapper>
@@ -57,7 +54,7 @@ class Archive extends Component {
                               })}
                             </li>
                             <li className="title">
-                              <Link to={`/${year}/Q${quarter}/${article.id_react}`}>{article.title}</Link>
+                              <Link to={`/${quarter}/${article.id_react}`}>{article.title}</Link>
                             </li>
                           </ul>
                         </div>

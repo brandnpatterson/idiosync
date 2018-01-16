@@ -140,7 +140,7 @@ class NewArticle extends Component {
           >
             {a.name}
           </button>
-          <Link to={`authors/${a.id_react}/edit`}>
+          <Link to={`authors/${a.id_author}/edit`}>
             <MdEdit />
           </Link>
         </div>

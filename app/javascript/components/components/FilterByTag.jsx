@@ -40,8 +40,8 @@ const FilterByTag = ({ authors, changeQuarter, filterByTag, match, quarter }) =>
           <h2>Articles</h2>
           <hr />
           {
-            filteredArticles.map((article, index) => (
-              <ul key={index}>
+            filteredArticles.map((article) => (
+              <ul key={article.id}>
                 <li className="author">
                   {authors.map(author => {
                     return author.id === article.author_id ? author.name : ''

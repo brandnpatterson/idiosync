@@ -1,13 +1,14 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-const ArchiveList = () => {
-
+const ArchiveList = ({ quarters }) => {
   return (
     <div>
       <h2>Archive</h2>
       <ul>
-        <li><Link to="/a/2017-Q4">2017-Q4</Link></li>
+        {quarters.map(q => {
+          return <li key={q.id}><Link to={`/a/${q.value}`}>{q.value}</Link></li>
+        })}
       </ul>
     </div>
   )

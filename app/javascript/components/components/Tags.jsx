@@ -14,8 +14,8 @@ const Tags = ({ articles, tags, quarter, year }) => {
       <h2>Tags</h2>
       <ul>
         {
-          tags.map((tag, index) => (
-            <li key={index} className="title">
+          tags.map(tag => (
+            <li key={tag.id} className="title">
               <Link to={`/tags/${tag.name}`}>{tag.name}</Link>
             </li>
           ))

@@ -129,7 +129,7 @@ class NewArticle extends Component {
       })
       .map((a, index) => (
         <div className="author-button"
-          key={index}
+          key={a.id}
           >
           <button
             onClick={() => this.setActiveAuthor(a.id)}
@@ -155,9 +155,9 @@ class NewArticle extends Component {
         if (aUpper > bUpper) return 1
         return 0
       })
-      .map((t, index) => (
+      .map(t => (
         <div className="tag-button"
-          key={index}
+          key={t.id}
           >
           <button
             data-active="false"

@@ -31,9 +31,9 @@ const Article = ({ article, articlesByQuarter, authors, getRequest, match, quart
                 </Link>
               </div>
               {authors &&
-                authors.map((author, index) => {
+                authors.map(author => {
                   if (author.id === article.author_id) {
-                    return <h3 key={index}>{author.name}</h3>
+                    return <h3 key={author.id}>{author.name}</h3>
                   } else {
                     return null
                   }
@@ -60,16 +60,16 @@ const Article = ({ article, articlesByQuarter, authors, getRequest, match, quart
           <p>{article.content}</p>
           <ul>
             {tags &&
-              tags.map((tag, index) => {
-                return <Link className="tags" key={index} to={`/tag/${tag.name}`}><li>{tag.name}</li></Link>
+              tags.map((tag) => {
+                return <Link className="tags" key={tag.id} to={`/tag/${tag.name}`}><li>{tag.name}</li></Link>
               })
             }
           </ul>
           <ul>
             {authors &&
-              authors.map((author, index) => {
+              authors.map(author => {
                 if (author.id === article.author_id) {
-                  return <h2 key={index}>{author.bio}</h2>
+                  return <h2 key={author.id}>{author.bio}</h2>
                 } else {
                   return null
                 }

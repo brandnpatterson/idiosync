@@ -40,6 +40,7 @@ class App extends Component {
       email: '',
       password: '',
       quarter: null,
+      quarters: null,
       search: '',
       tags: [],
       tagsByQuarter: [],
@@ -123,6 +124,7 @@ class App extends Component {
         this.setState({ articlesByQuarter: articlesByQuarter })
         this.setState({ articles: articlesPreQuarter })
         this.setTagsByQuarter()
+        this.gatherAllQuarters()
       })
       .catch(err => console.log(err))
   }
@@ -159,6 +161,28 @@ class App extends Component {
     } else if (moment().format('M') === '10' || moment().format('M') === '11' || moment().format('M') === '12') {
       this.changeQuarter(`${year}-4`)
     }
+  }
+
+  gatherAllQuarters = () => {
+    const { articles } = this.state
+
+    const quarterArr = [];
+
+    articles.map(article => {
+      quarterArr.push(article.id_quarter);
+    })
+
+    let quartersFromSet = [...new Set(quarterArr)];
+    let quarters = [];
+
+    for (let i = 0; i < quartersFromSet.length; i++) {
+      quarters.push({
+        id: i,
+        value: quartersFromSet[i]
+      })
+    }
+
+    this.setState({ quarters })
   }
 
   // authentication
@@ -292,6 +316,7 @@ class App extends Component {
       flash_delete,
       flash_update,
       quarter,
+      quarters,
       search,
       tags,
       tagsByQuarter
@@ -420,13 +445,14 @@ class App extends Component {
           )}
           { /* ArchiveList */}
           <Route exact path="/submissions" component={Submissions} />
-          {articles && authors && tags && (
+          {quarters && articles && authors && tags && (
             <Route exact path="/a" render={() => {
               return <ArchiveList
                 articles={articles}
                 authors={authors}
                 flash_delete={flash_delete}
                 flash_update={flash_update}
+                quarters={quarters}
                 tags={tags}
               />
             }} />

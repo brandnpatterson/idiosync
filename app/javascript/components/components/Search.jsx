@@ -32,10 +32,10 @@ const Search = ({ changeQuarter, filteredArticles, quarter, search, updateSearch
         value={search}
       />
       <ul className="search__result">
-        {filteredArticles.map((article, index) => (
+        {filteredArticles.map(article => (
           <Link
             className={"search__result--item" + (search === '' ? " hidden" : '')}
-            key={index}
+            key={article.id}
             onClick={testForMatch}
             to={`/${article.id_quarter}/${article.id_react}`}
           >

@@ -161,6 +161,12 @@ class App extends Component {
     }
   }
 
+  changeQuarter = (setQuarter) => {
+    this.setState({
+      quarter: setQuarter
+    }, () => this.getRequest())
+  }
+
   gatherAllQuarters = () => {
     const { articles } = this.state
 
@@ -295,12 +301,6 @@ class App extends Component {
         flash_update: false
       })
     }
-  }
-
-  changeQuarter = (setQuarter) => {
-    this.setState({
-      quarter: setQuarter
-    }, () => this.getRequest())
   }
 
   render () {
@@ -444,7 +444,7 @@ class App extends Component {
           { /* ArchiveList */}
           <Route exact path="/submissions" component={Submissions} />
           {quarters && articles && authors && tags && (
-            <Route exact path="/a" render={() => {
+            <Route exact path="/archive" render={() => {
               return <ArchiveList
                 articles={articles}
                 authors={authors}
@@ -457,7 +457,7 @@ class App extends Component {
           )}
           { /* ArchiveList/:archive */}
           {articles && authors && tags && (
-            <Route exact path="/a/:archive" render={({ match }) => {
+            <Route exact path="/:archive" render={({ match }) => {
               return <Archive
                 articlesByQuarter={articlesByQuarter}
                 authors={authors}

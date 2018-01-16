@@ -28,7 +28,7 @@ const Header = ({ authenticated, changeQuarter, filteredArticles, logout, quarte
     <Nav>
       <ul className="left">
         <li><Link to="/">Home</Link></li>
-        <li><Link to="/a">Archive</Link></li>
+        <li><Link to="/archive">Archive</Link></li>
       </ul>
       <ul className="right">
         <li>

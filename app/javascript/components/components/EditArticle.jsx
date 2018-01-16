@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Redirect } from 'react-router'
 import { bool, func, object } from 'prop-types'
 import axios from 'axios'
+import ReactQuill from 'react-quill'
 import styled from 'styled-components'
 
 import EditArticleForm from './themes/Form'
@@ -34,6 +35,13 @@ class EditArticle extends Component {
     this.setState({
       [e.target.name]: e.target.value
     })
+  }
+
+  onRichChange = (value) => {
+    this.setState({ 
+      content: value 
+    })
+    console.log(this.state)
   }
 
   componentWillMount () {    
@@ -123,7 +131,7 @@ class EditArticle extends Component {
                 <input name="title" value={title} onChange={this.onChange} type="text" autoFocus required />
                 </label>
                 <label htmlFor="content"> Content:
-                <textarea name="content" value={content} onChange={this.onChange} rows="20" required />
+                  <ReactQuill name="content" value={content} onChange={this.onRichChange} required />
                 </label>
                 <label htmlFor="tag_list"> Tags:
                 <input name="tag_list" value={tag_list} onChange={this.onChange} type="text" required />

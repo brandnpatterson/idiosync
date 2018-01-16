@@ -39,7 +39,6 @@ class NewArticle extends Component {
     this.setState({
       [e.target.name]: e.target.value
     })
-    console.log(this.state)
   }
 
   onRichChange = (value) => {

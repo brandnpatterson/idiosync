@@ -49,20 +49,18 @@ class App extends Component {
   }
 
   componentWillMount () {
+    this.setState({
+      quarter: window.location.href.substr(22, 6)
+    }, () => {
+      this.getRequest()
+    })
+
     let localAuth = localStorage.getItem('authenticated')
     if (localAuth === 'true') {
       this.setState({
         authenticated: true
       })
     }
-  }
-
-  componentDidMount () {
-    this.setState({
-      quarter: window.location.href.substr(22, 6)
-    }, () => {
-      this.getRequest()
-    })
   }
 
   getRequest = () => {

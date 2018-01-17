@@ -25,13 +25,17 @@ const reqArticles = '/api/v1/articles'
 const reqAuthors = '/api/v1/authors'
 const reqSession = '/api/v1/sessions'
 
+const dev = 22
+const prod = 33
+let location = dev
+
 class App extends Component {
   constructor () {
     super()
     this.state = {
       articles: [],
       articlesByQuarter: [],
-      authenticated: true,
+      authenticated: false,
       authors: null,
       confirm_delete: false,
       flash_create: false,
@@ -49,9 +53,6 @@ class App extends Component {
   }
 
   componentWillMount () {
-    const dev = 22
-    const prod = 33
-    const location = prod
     this.setState({
       quarter: window.location.href.substr(location, 6)
     }, () => {
@@ -365,6 +366,17 @@ class App extends Component {
               />
             }} />
           )}
+          { /* Log In */}
+          <Route exact path="/login" render={() => {
+            return <Login
+              authenticated={authenticated}
+              email={this.state.email}
+              login={this.login}
+              password={this.state.password}
+              updateEmail={this.updateEmail}
+              updatePassword={this.updatePassword}
+            />
+          }} />
           { /* New Article */ }
           {articles && authors && tags && (
             <Route exact path="/new-article" render={() => {
@@ -500,16 +512,7 @@ class App extends Component {
               )
             }} />
           )}
-          { /* Log In */ }
-          <Route exact path="/login" render={() => {
-            return <Login
-              email={this.state.email}
-              login={this.login}
-              password={this.state.password}
-              updateEmail={this.updateEmail}
-              updatePassword={this.updatePassword}
-            />
-          }} />
+          {/* NotFound */}
           {quarter && articles && authors && tags && (
             <Route component={NotFound} />
           )}

@@ -304,6 +304,7 @@ class App extends Component {
   }
 
   render () {
+
     const {
       articles,
       articlesByQuarter,
@@ -328,7 +329,9 @@ class App extends Component {
           .indexOf(search.toLowerCase()) !== -1
       })
     }
-    
+
+    console.log(window.location.href.substr(22, 6))
+
     return (
       <AppWrapper>
         <div onClick={this.resetSearch}>

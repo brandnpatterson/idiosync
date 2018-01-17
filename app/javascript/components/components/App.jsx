@@ -49,8 +49,11 @@ class App extends Component {
   }
 
   componentWillMount () {
+    const dev = 22
+    const prod = 33
+    const location = prod
     this.setState({
-      quarter: window.location.href.substr(22, 6)
+      quarter: window.location.href.substr(location, 6)
     }, () => {
       this.getRequest()
     })
@@ -329,8 +332,6 @@ class App extends Component {
           .indexOf(search.toLowerCase()) !== -1
       })
     }
-
-    console.log(window.location.href.substr(22, 6))
 
     return (
       <AppWrapper>

@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Link, Switch, Route } from 'react-router-dom'
+import { Redirect } from 'react-router'
 import axios from 'axios'
 import moment from 'moment'
 import styled from 'styled-components'
@@ -37,6 +38,7 @@ class App extends Component {
       articlesByQuarter: [],
       authenticated: false,
       authors: null,
+      fireRedirect: false,
       confirm_delete: false,
       flash_create: false,
       flash_delete: false,
@@ -206,6 +208,7 @@ class App extends Component {
         localStorage.setItem('email', this.state.email)
         this.setState({
           authenticated: true,
+          fireRedirect: true,
           email: '',
           password: ''
         })
@@ -315,6 +318,7 @@ class App extends Component {
       authenticated,
       authors,
       confirm_delete,
+      fireRedirect,
       flash_create,
       flash_delete,
       flash_update,
@@ -324,6 +328,7 @@ class App extends Component {
       tags,
       tagsByQuarter
     } = this.state
+    const { from } = this.props || '/'
 
     let filteredArticles = []
     
@@ -365,6 +370,9 @@ class App extends Component {
                 tagsByQuarter={tagsByQuarter}
               />
             }} />
+          )}
+          {fireRedirect && (
+            <Redirect to={from || '/'} />
           )}
           { /* Log In */}
           <Route exact path="/login" render={() => {

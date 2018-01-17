@@ -28,7 +28,7 @@ const reqSession = '/api/v1/sessions'
 
 const dev = 22
 const prod = 33
-let location = dev
+let location = prod
 
 class App extends Component {
   constructor () {

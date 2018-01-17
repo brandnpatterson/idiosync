@@ -18,7 +18,6 @@ import NewArticle from './NewArticle'
 import NewAuthor from './NewAuthor'
 import NotFound from './NotFound'
 import Submissions from './Submissions'
-import Tags from './Tags'
 
 const landingImg = 'images/landing.jpg'
 

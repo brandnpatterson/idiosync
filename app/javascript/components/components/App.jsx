@@ -221,10 +221,7 @@ class App extends Component {
   logout = () => {
     localStorage.setItem('authenticated', false)
     localStorage.setItem('email', '')
-
-    this.setState({
-      authenticated: false
-    })
+    window.location.reload()
   }
 
   // search

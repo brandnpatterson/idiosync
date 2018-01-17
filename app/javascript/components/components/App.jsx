@@ -212,6 +212,7 @@ class App extends Component {
           password: ''
         })
         localStorage.setItem('authenticated', this.state.authenticated)
+        window.location.reload()
       }
     })
     .catch(err => console.log(err))

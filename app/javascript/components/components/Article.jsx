@@ -61,7 +61,7 @@ const Article = ({ article, articlesByQuarter, authors, getRequest, match, quart
           <ul>
             {tags &&
               tags.map((tag) => {
-                return <Link className="tags" key={tag.id} to={`/tag/${tag.name}`}><li>{tag.name}</li></Link>
+                return <Link className="tags" key={tag.id} to={`/tags/${tag.name}`}><li>{tag.name}</li></Link>
               })
             }
           </ul>

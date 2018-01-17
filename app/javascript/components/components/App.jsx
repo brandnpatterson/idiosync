@@ -336,6 +336,8 @@ class App extends Component {
       })
     }
 
+    filteredArticles.length = 4
+
     return (
       <AppWrapper>
         <div onClick={this.resetSearch}>
@@ -456,12 +458,6 @@ class App extends Component {
               )
             }} />
           )}
-          { /* Tags */ }
-          {articles && tags && (
-            <Route exact path="/tags" render={() => {
-              return <Tags articles={articles} tags={tags} />
-            }} />
-          )}
           { /* ArchiveList */}
           <Route exact path="/submissions" component={Submissions} />
           {quarters && articles && authors && tags && (
@@ -494,7 +490,7 @@ class App extends Component {
           )}
           { /* Tags/:tagName */ }
           {articles && authors && tags && (
-            <Route path={`/tag/:tagName`} render={({ match }) => {
+            <Route path={`/tags/:tagName`} render={({ match }) => {
               return (
                 <FilterByTag
                   authors={authors}

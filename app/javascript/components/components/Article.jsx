@@ -1,5 +1,5 @@
 import React from 'react'
-import { array, object, string } from 'prop-types'
+import { array, func, object, string } from 'prop-types'
 import { Link } from 'react-router-dom'
 import MdEdit from 'react-icons/lib/md/edit'
 import styled from 'styled-components'
@@ -8,10 +8,11 @@ const propTypes = {
   article: object,
   articlesByQuarter: array.isRequired,
   authors: array.isRequired,
+  getRequest: func.isRequired,
   quarter: string.isRequired
 }
 
-const Article = ({ article, articlesByQuarter, authors, getRequest, match, quarter }) => {
+const Article = ({ article, articlesByQuarter, authenticated, authors, getRequest, match, quarter }) => {
   const total = articlesByQuarter.length
   let tags
   if (article) {
@@ -26,9 +27,11 @@ const Article = ({ article, articlesByQuarter, authors, getRequest, match, quart
             <div>
               <div className="title-wrapper">
                 <h2>{article.title}</h2>
-                <Link to={`/${quarter}/${article.id_react}/edit`}>
-                  <MdEdit />
-                </Link>
+                {authenticated &&
+                  <Link to={`/${quarter}/${article.id_react}/edit`}>
+                    <MdEdit />
+                  </Link>
+                }
               </div>
               {authors &&
                 authors.map(author => {

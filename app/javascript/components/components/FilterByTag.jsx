@@ -31,8 +31,6 @@ const FilterByTag = ({ authors, changeQuarter, filterByTag, match, quarter }) =>
       }
     })
   }
-
-  console.log(filteredArticles)
   
   return (
     <FilterByTagWrapper>

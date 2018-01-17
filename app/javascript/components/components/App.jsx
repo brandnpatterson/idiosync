@@ -27,7 +27,7 @@ const reqSession = '/api/v1/sessions'
 
 const dev = 22
 const prod = 33
-let location = prod
+let location = dev
 
 class App extends Component {
   constructor () {
@@ -423,6 +423,7 @@ class App extends Component {
                 <Article
                   article={articlesByQuarter.find(a => a.id_react === parseInt(match.params.id, 10))}
                   articlesByQuarter={articlesByQuarter}
+                  authenticated={authenticated}
                   authors={authors}
                   changeQuarter={this.changeQuarter}
                   getRequest={this.getRequest}

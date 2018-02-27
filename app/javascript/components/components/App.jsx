@@ -308,7 +308,6 @@ class App extends Component {
   }
 
   render () {
-
     const {
       articles,
       articlesByQuarter,
@@ -356,8 +355,8 @@ class App extends Component {
         <Switch>
           { /* Articles */ }
           {articles && authors && tags && (
-            <Route exact path="/" render={() => {
-              return <Articles
+            <Route exact path="/">
+              <Articles
                 articlesByQuarter={articlesByQuarter}
                 changeQuarter={this.changeQuarter}
                 authors={authors}
@@ -368,14 +367,14 @@ class App extends Component {
                 setQuarter={this.setQuarter}
                 tagsByQuarter={tagsByQuarter}
               />
-            }} />
+            </Route>
           )}
           {fireRedirect && (
             <Redirect to={from || '/'} />
           )}
           { /* Log In */}
-          <Route exact path="/login" render={() => {
-            return <Login
+          <Route exact path="/login">
+            <Login
               authenticated={authenticated}
               email={this.state.email}
               login={this.login}
@@ -383,11 +382,11 @@ class App extends Component {
               updateEmail={this.updateEmail}
               updatePassword={this.updatePassword}
             />
-          }} />
+          </Route>
           { /* New Article */ }
           {articles && authors && tags && (
-            <Route exact path="/new-article" render={() => {
-              return <NewArticle
+            <Route exact path="/new-article">
+              <NewArticle
                 articles={articles}
                 authenticated={authenticated}
                 authors={authors}
@@ -397,29 +396,27 @@ class App extends Component {
                 flash_update={flash_update}
                 getRequest={this.getRequest}
               />
-            }} />
+            </Route>
           )}
           { /* Edit Article by :id */ }
           {articles && (
-            <Route path={`/${quarter}/:id/edit`} render={({ match }) => {
-              return (
-                <EditArticle
-                  article={articlesByQuarter.find(a => a.id_react === parseInt(match.params.id, 10))}
-                  articles={articles}
-                  deleteFlashConfirmation={this.deleteFlashConfirmation}
-                  updateFlashConfirmation={this.updateFlashConfirmation}
-                  getRequest={this.getRequest}
-                  confirm_delete={confirm_delete}
-                  deleteConfirmation={this.deleteConfirmation}
-                  tags={tags}
-                />
-              )
-            }} />
+            <Route path={`/${quarter}/:id/edit`} render={({ match }) => (
+              <EditArticle
+                article={articlesByQuarter.find(a => a.id_react === parseInt(match.params.id, 10))}
+                articles={articles}
+                deleteFlashConfirmation={this.deleteFlashConfirmation}
+                updateFlashConfirmation={this.updateFlashConfirmation}
+                quarter={quarter}
+                getRequest={this.getRequest}
+                confirm_delete={confirm_delete}
+                deleteConfirmation={this.deleteConfirmation}
+                tags={tags}
+              />
+            )} />
           )}
           { /* Article/:id */ }
           {quarter && articlesByQuarter && authors && tags && (
-            <Route path={`/${quarter}/:id`} render={({ match }) => {
-              return (
+            <Route path={`/${quarter}/:id`} render={({ match }) => (
                 <Article
                   article={articlesByQuarter.find(a => a.id_react === parseInt(match.params.id, 10))}
                   articlesByQuarter={articlesByQuarter}
@@ -429,41 +426,38 @@ class App extends Component {
                   getRequest={this.getRequest}
                   quarter={quarter}
                 />
-              )
-            }} />
+            )} />
           )}
           { /* New Author */ }
           {articles && authors && (
-            <Route exact path="/new-author" render={() => {
-              return <NewAuthor
+            <Route exact path="/new-author">
+              <NewAuthor
                 articles={articles}
                 authenticated={authenticated}
                 authors={authors}
                 createFlashConfirmation={this.createFlashConfirmation}
                 getRequest={this.getRequest}
               />
-            }} />
+            </Route>
           )}
           { /* Edit Author by :id */ }
           {authors && (
-            <Route path="/authors/:id/edit" render={({ match }) => {
-              return (
-                <EditAuthor
-                  author={authors.find(a => a.id_author === parseInt(match.params.id, 10))}
-                  deleteFlashConfirmation={this.deleteFlashConfirmation}
-                  updateFlashConfirmation={this.updateFlashConfirmation}
-                  getRequest={this.getRequest}
-                  confirm_delete={confirm_delete}
-                  deleteConfirmation={this.deleteConfirmation}
-                />
-              )
-            }} />
+            <Route path="/authors/:id/edit" render={({ match }) => (
+              <EditAuthor
+                author={authors.find(a => a.id_author === parseInt(match.params.id, 10))}
+                deleteFlashConfirmation={this.deleteFlashConfirmation}
+                updateFlashConfirmation={this.updateFlashConfirmation}
+                getRequest={this.getRequest}
+                confirm_delete={confirm_delete}
+                deleteConfirmation={this.deleteConfirmation}
+              />
+            )} />
           )}
           { /* ArchiveList */}
           <Route exact path="/submissions" component={Submissions} />
           {quarters && articles && authors && tags && (
-            <Route exact path="/archive" render={() => {
-              return <ArchiveList
+            <Route exact path="/archive">
+              <ArchiveList
                 articles={articles}
                 authors={authors}
                 flash_delete={flash_delete}
@@ -471,12 +465,12 @@ class App extends Component {
                 quarters={quarters}
                 tags={tags}
               />
-            }} />
+            </Route>
           )}
           { /* ArchiveList/:archive */}
           {articles && authors && tags && (
-            <Route exact path="/:archive" render={({ match }) => {
-              return <Archive
+            <Route exact path="/:archive" render={({ match }) => (
+              <Archive
                 articlesByQuarter={articlesByQuarter}
                 authors={authors}
                 changeQuarter={this.changeQuarter}
@@ -487,12 +481,11 @@ class App extends Component {
                 quarter={quarter}
                 tagsByQuarter={tagsByQuarter}
               />
-            }} />
+            )} />
           )}
           { /* Tags/:tagName */ }
           {articles && authors && tags && (
-            <Route path={`/tags/:tagName`} render={({ match }) => {
-              return (
+            <Route path={`/tags/:tagName`} render={({ match }) => (
                 <FilterByTag
                   authors={authors}
                   changeQuarter={this.changeQuarter}
@@ -511,8 +504,7 @@ class App extends Component {
                   }
                   quarter={quarter}
                 />
-              )
-            }} />
+            )} />
           )}
           {/* NotFound */}
           {quarter && articles && authors && tags && (

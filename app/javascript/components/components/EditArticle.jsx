@@ -112,7 +112,7 @@ class EditArticle extends Component {
       tag_list,
       fireRedirect
     } = this.state
-    const { article, confirm_delete, deleteConfirmation, from } = this.props || '/'
+    const { article, confirm_delete, deleteConfirmation, quarter, from } = this.props || '/'
     
     return (
       <EditArticleWrapper>
@@ -162,7 +162,7 @@ class EditArticle extends Component {
         }
         {/* Redirect */}
         {fireRedirect && (
-          <Redirect to={from || '/'} />
+          <Redirect to={from || `/${quarter}` } />
         )}
       </EditArticleWrapper>
     )

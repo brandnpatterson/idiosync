@@ -21,7 +21,7 @@ class Articles extends Component {
 
   render () {
     const { articlesByQuarter, authors, tagsByQuarter, flash_delete, flash_update, quarter } = this.props
-    
+
     return (
       <ArticlesWrapper>
         <div className="outer">
@@ -54,7 +54,7 @@ class Articles extends Component {
                             })}
                           </li>
                           <li className="title">
-                            <Link to={`/${quarter}/${article.id_react}`}>{article.title}</Link>
+                            <Link to={`/${quarter}/${article.id_react}`}>{article.title} - {article.id_react}</Link>
                           </li>
                         </ul>
                       </div>
